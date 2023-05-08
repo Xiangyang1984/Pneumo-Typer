@@ -1,0 +1,100 @@
+###06A_06B_06C_06D_06E###checked
+#wciP	06A, 06C, 06B, 06D, 06EA, 06EB	#snps wciP-SPC06A was used to discriminating 06B and 06A, 06D and 06C
+wciP	06A, 06B	#snps wciP-SPC06A was used to discriminating 06B and 06A, 06D and 06C
+wciP	06C, 06D	#snps wciP-SPC06A was used to discriminating 06B and 06A, 06D and 06C
+
+#wciN	06A|06B, 06C|06D, 06E	#allele not used
+###07A_07F###checked
+wcwD	07F: normal, 07A: pseudo#insertionA587	#frameshift mutation using this wcwD-spc07F to discriminating 07F and 07A
+wcwK	07B, 07C, '40'	#snps
+
+###09A_09L_09N_09V###checked
+wcjE	09V: normal, 09A: pseudo#deletionG722	#frameshift mutation using this wcjE-SPC09V to discriminating 09V and 09A
+
+#wcjD	09A: 1, 09V: 1, 09L: 0, 09N: 0	#presence_absence not use
+#wchA	09L, 09N	#snps not use
+#wcjA	09L, 09N	#snps not use
+#wcjB	09L, 09N	#snps not use
+#wzy	09L, 09N	#snps not use
+
+###10A_10B###checked
+wcrC	10A, 10B	#wrcC was different in all four serotype (10A,10B,10C and 10F), but this gene was only used for discriminating 10A and 10B
+###10B_10F###
+#wcrG	10A: 1, 10B: 1, 10C: 0, 10F: 0	#presence_absence
+#wcrH	10A: 0, 10B: 0, 10C: 1, 10F: 1	#presence_absence
+#wciG	10A: 0, 10B: 0, 10C: 1, 10F: 1	#presence_absence
+
+###11A_11B_11C_11D_11F### checked 
+wcrL	11A, 11D, 11F	#snps  using this gene ti discriminating 11A from 11D and 11F
+#wcjC	11A: 1, 11D: 1, 11F: 1, 11B: 0, 11C: 0	#presence_absence
+#wcjE	11A: 1, 11D: 1, 11F: 1, 11B: 0, 11C: 0	#presence_absence
+#wcwR	11A: 0, 11D: 0, 11F: 0, 11B: 1, 11C: 1	#presence_absence
+#gct	11A: normal, 11C: normal, 11D: normal, 11B: pseudo#deletionA130, 11F: pseudo#deletionA130	#frameshift mutation
+
+###12B_12F### checked
+#wciI	12A|12B|'44'|'46', 12F	#allele using wciI-12F to discriminating 12F
+wciI-SPC12F	12B, 12F	#allele using wciI-12F to discriminating 12F
+#wcxF	12A, 12B|12F, '44', '46'	#snps wcxF-SPC46 was used to discriminating 46 and 12A
+wcxF-SPC46	12A, 46	#snps wcxF-SPC46 was used to discriminating 46 and 12A
+#wzy	12A, 12B|12F|'44'|'46'	#snps wzy-SPC12A was used to discriminating 12A and 12B
+#wzy	12A, 12B	#snps wzy-SPC12A was used to discriminating 12A and 12B
+#wcxD	12A, 12B|12F|'44', '46'	#snps not used
+
+
+###15A_15B_15C_15F###checked
+wciZ	15B: normal, 15C: pseudo#repeatTA413	#frameshift mutation used to discriminating 15B and 15C
+#wchL	15A, 15B|15C	#allele not used
+#wzd	15A, 15B|15C	#allele not used
+#glf	15F: 1, 15A: 0, 15B: 0, 15C: 0	#presence_absence not used
+#rmlB	15F: 1, 15A: 0, 15B: 0, 15C: 0	#presence_absence not used
+#rmlD	15F: 1, 15A: 0, 15B: 0, 15C: 0	#presence_absence not used
+#wcjE	15F: 1, 15A: 0, 15B: 0, 15C: 0	#presence_absence not used
+
+
+###18A_18B_18C_18F###checked
+wcxM	18F: 1, 18A: 0, 18B: 0, 18C: 0	#presence_absence used to obtain 18F
+#wciX	18F: normal, 18C: normal, 18B: pseudo#stopcodon	#frameshift mutation used to discriminating 18B and 18C
+wciX	18C: normal, 18B: pseudo#stopcodon	#frameshift mutation used to discriminating 18B and 18C
+#glf	18F: 1, 18A: 0, 18B: 1, 18C: 1	#presence_absence not used
+#wciX	18F: 1, 18A: 0, 18B: 1, 18C: 1	#presence_absence not used
+
+
+###19A_19AF###checked
+wzy	19A, 19F, 19C, 19B	#allele  used to discriminating 19A and 19F
+#HG264	19B: 0, 19C: 1	#presence_absence not used
+#glf	19B: 0, 19C: 1	#presence_absence not used
+#wchU	19B: 0, 19C: 1	#presence_absence not used
+
+###22A_22F###checked
+#wcwA	22A: 1, 22F: 0	#presence_absence  although reference 22F have this gene 
+wcwA-SPC22A	22A: 1, 22F: 0	#presence_absence  although reference 22F have this gene 
+wcwA-SPC22F	22A: 1, 22F: 0	#presence_absence  although reference 22F have this gene 
+#wcwC	22A: 1, 22F: 0	#presence_absence  although reference 22F have this gene
+#wcwC-SPC22	22A: 1, 22F: 0	#presence_absence  although reference 22F have this gene
+
+###23A_23B_23F###
+wchA	23A, 23B|23F	#allele
+wzy	23A, 23B, 23F	#allele
+
+###25A_25F_38###checked
+wcyV	25A: 0, 25F: 0, 38: 1	#presence_absence used to obtain 38
+#wcyC	25A|'38', 25F	#snps  not used 
+#wcyD	25A|25F, 38	#allele not used
+
+###28A_28F###checked
+wciU	28A, 28F	#snps
+
+###33A_33F_37###checked
+wcjE	33A: normal, 33F: pseudo#inserionT433	#frameshift mutation if not contain wcjE-SPC33A, 33A and 33F
+wciN	33B: wciN-1, 33D: wciN-2	#allele wciN-SPC33B used to discriminating 33B and 33D
+#tts	33A: 0, 33F: 0, '37': 1	#presence_absence
+
+
+###35A_35C_42###
+wcrX	35C: normal, '42': normal, 35A: pseudo#insertionA248	#frameshift mutation
+#mnp1	35A, 35C|'42'	#snps
+#wcrI	35A|35C, '42'	#snps 
+#wzh	35A|35C, '42'	#snps
+
+###41A_41F###checked
+wcrX	41F: normal, 41A: pseudo#deletionG23	#frameshift mutation
