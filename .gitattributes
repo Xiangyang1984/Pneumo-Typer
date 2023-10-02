@@ -1,0 +1,2 @@
+ST_tool/database/cgmlst/cgMLST_profiles filter=lfs diff=lfs merge=lfs -text
+ST_tool/database/cgmlst/cgMLSA_loci/cgMLSA_loci.fas filter=lfs diff=lfs merge=lfs -text

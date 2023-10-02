@@ -1,0 +1,57 @@
+###06A_06B_06C_06D_06E###
+wciP	06A, 06B	#snps discriminating 06A and 06B
+wciP	06C, 06D	#snps discriminating 06C and 06D
+
+###07A_07F_40###
+wcwD	07F: normal, 07A: pseudo#insertionA587	#frameshift mutation using this wcwD-spc07F to discriminating 07F and 07A
+wcwK	07B, 07C, '40'	#snps
+
+###09A_09L_09N_09V###
+wcjE	09V: normal, 09A: pseudo#deletionG722	#frameshift mutation using this wcjE-SPC09V to discriminating 09V and 09A
+wcjA	09L, 09N	#snps not use
+wcjB	09L, 09N	#snps not use
+
+###10A_10B###
+wcrC	10A, 10B	#wrcC was different in all four serotype (10A,10B,10C and 10F), but this gene was only used for discriminating 10A and 10B
+
+###11A_11B_11D_11F###  
+wcrL	11A, 11D, 11F	#snps  using this gene to discriminate 11A from 11D and 11F
+
+###12B_12F### 
+wciI-SPC12F	12B, 12F	#allele using wciI-12F to discriminating 12F
+wcxF-SPC46	12A, 46	#snps wcxF-SPC46 was used to discriminating 46 and 12A
+
+###15A_15B_15C_15F###
+wciZ	15B: normal, 15C: pseudo#repeatTA413	#frameshift mutation used to discriminating 15B and 15C
+
+
+###18A_18B_18C_18F###
+wcxM	18F: 1, 18A: 0, 18B: 0, 18C: 0	#presence used to obtain 18F
+wciX	18C: normal, 18B: pseudo#stopcodon	#frameshift mutation used to discriminating 18B and 18C
+
+###19A_19AF###
+wzy	19A, 19F, 19C, 19B	#allele used to discriminate 19A and 19F
+
+###22A_22F###
+wcwA	22A: 1, 22F: 0	#absence  this gene was used to obtain 22F which does not contain wcwA. (Note: reference 22F have this gene) 
+
+###23A_23B_23F###
+wchA	23A, 23B|23F	#allele
+wzy	23A, 23B, 23F	#allele
+
+###25A_25F_38###
+wcyV	25A: 0, 25F: 0, 38: 1	#presence used to obtain 38
+
+###28A_28F###
+wciU	28A, 28F	#snps
+
+###33A_33F###
+wcjE	33A: normal, 33F: pseudo#inserionT433	#frameshift mutation if not contain wcjE-SPC33A, 33A and 33F
+wciN-SPC33B	33B, 33D	#presence wciN-SPC33B used to discriminating 33B and 33D
+
+###35A_35C_42###
+wcrX	35C: normal, '42': normal, 35A: pseudo#insertionA248	#frameshift mutation
+wciG	35D: 0, 35B: 1	#absence used to obtain 35D
+
+###41A_41F###
+wcrX	41F: normal, 41A: pseudo#deletionG23	#frameshift mutation
