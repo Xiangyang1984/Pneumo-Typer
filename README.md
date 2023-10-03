@@ -153,7 +153,11 @@ Setting "-c" to "T" will perform cgST analysis which takes quite a long time, an
 
 #### Example 2: A Newick format tree file is used by Pneumo-Typer to automatically associate the distribution of cps gene and genetic organization of cps cluster with their phylogeny.
 
-18_genome_tree.nwk: a tree file, it was a nwk format phylogenetic tree of 18 genomes using RaxML. It can be downloaded from the website: www.microbialgenomic.cn/temp_dir/18_genome_tree.nwk. Add the parameter -tree to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to map the figures with a nwk-format tree as follows: *Create a heatmap according to the distribution of the cps gene at the class level using the following command:
+18_genome_tree.nwk: a tree file, it was a nwk format phylogenetic tree of 18 genomes using RaxML. It can be downloaded from the website: www.microbialgenomic.cn/temp_dir/18_genome_tree.nwk. 
+
+Add the parameter -tree to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to map the figures with a nwk-format tree as follows: 
+
+*Create a heatmap according to the distribution of the cps gene at the class level using the following command:
 
 	$ perl path_to_pneumo-typer/script/heatmap.pl -dir path_to_pneumo-pyper_workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf path_to_pneumo-pyper_workplace/result_statistics/Statistics_OUT/classification_CPS -e path_to_pneumo-pyper_workplace/Serotype_ST.out -o path_to_pneumo-pyper_workplace -tree path_to_18_genome_tree.nwk		
 
