@@ -6,19 +6,15 @@ Pneumo-Typer is a comprehensive prediction and visualization of serotype and seq
 
 * [Installation](#installation)
 
- 	* [Installing the Pneumo-Typer via Conda](#installing-the-pneumo-typer-via-conda)
+ 	* [Installing the Pneumo-Typer via Conda](#installing-the-Pneumo-Typer-via-conda)
 	
  	* [Installing the Pneumo-Typer from Source Code](#installing-the-pneumo-typer-from-source-code)
 	
  	* [Test the Pneumo-Typer with Example Data](#test-the-pneumo-typer-with-example-data)
 	
  * [Usage](#usage)
- 
- 	* [Preparation of Input Data](#preparation-of-input-data)
 	
  	* [Running pneumo-typer.pl](#running-pneumo-typer)
-	
-	* [Customization of the Figure](#customization-of-the-figure)
 	
 	* [Detailed Explanations for Arguments in pneumo-typer.pl](#detailed-explanations-for-arguments-in-pneumo-typer)
 
@@ -27,7 +23,7 @@ Pneumo-Typer is a comprehensive prediction and visualization of serotype and seq
 
 Pneumo-Typer is a Perl script which doesn't need compilation. But before running, Pneumo-Typer needs to pre-install prodigal, blat, blast, and several Perl modules. There are two ways to install the Pneumo-Typer.
 
-## Installing the Gcluster via Conda
+## Installing the Pneumo-Typer via Conda
 We have build a bioconda package for Pneumo-Typer. Users are recommended to install the [conda](https://www.anaconda.com), then to install this package simply with the following command:
 
 	$ conda install -c bioconda pneumo-typer
@@ -73,10 +69,6 @@ Once Pneumo-Typer installation is finished, a small dataset in the **./test_data
 	$ perl pneumo-typer -Ts T
 	
 	Test-step1: Checks for pneumo-typer dependencies...
-	################################################################
-
-	Tue Feb 18 13:16:12 2020: Gcluster.pl start...
-
 	################################################################
 	***GD Version  2.71 ok.
 	***GD::SVG Version   0.33 ok.
@@ -141,23 +133,23 @@ Once Pneumo-Typer installation is finished, a small dataset in the **./test_data
 It is very simple to use Pneumo-Typer. First, prepare input datas, at least containing Genbank_file_directory; then, run Pneumo-Typer like this "perl pneumo-typer.pl -d Genbank_file_directory". 
 
 
-## Running Gcluster
+## Running Pneumo-Typer
 
 Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genomes is under a directory named "18_genomes_dir", which can be downloaded from website: www.microbialgenomic.cn/temp_dir/18_genomes.tar.gz.
 
-#### Example 1: Run Pneumo-Typer is a easy task by using the following command
+#### Example 1: Run Pneumo-Typer is an easy task by using the following command
 
 This command will do serotype predict and create figures, and ST analysis with 10 threads. When finished, Pneumo-Typer will output results as follows:
-a.ST results
-b.predicted serotype results
-c.create three maps with the ST and predicted serotype and information showed 
-	heatmap_gene.svg: a heatmap of the distribution of cps gene at gene level;
-	heatmap_class.svg: a heatmap of the distribution of cps gene at class level;
-	cps_cluster.svg: a genetic organization of cps gene cluster
+* a.ST results
+* b.predicted serotype results
+* c.create three maps with the ST and predicted serotype and information showed 
+	*heatmap_gene.svg: a heatmap of the distribution of cps gene at gene level;
+	*heatmap_class.svg: a heatmap of the distribution of cps gene at class level;
+	*cps_cluster.svg: a genetic organization of cps gene cluster
 
 	$ perl pneumo-typer.pl -d 18_genomes_dir -t 10 -m T
 		
-Setting "-c" to "T" will perform cgST analysis that takes quite a long time, and the cgST information will also be showed on maps.
+Setting "-c" to "T" will perform cgST analysis which takes quite a long time, and the cgST information will also be showed on maps.
 
 #### Example 2: A Newick format tree file is used by Pneumo-Typer to automatically associate the distribution of cps gene and genetic organization of cps cluster with their phylogeny.
 
@@ -165,24 +157,24 @@ tree file: 18_genome_tree.nwk, it was a nwk format phylogenetic tree of 18 genom
 RaxML. 
 Add the parameter -tree to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to mapping a nwk-format tree as follows:
 
-	Creat a heatmap according to the distribution of the cps gene at class level using the following command:
+	*Create a heatmap according to the distribution of the cps gene at class level using the following command:
 
-	$ perl path_to_pneumo-typer/script/heatmap.pl -dir path_to_pneumo-pyper_workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf path_to_pneumo-pyper_workplace/result_statistics/Statistics_OUT/classification_CPS -e path_to_pneumo-pyper_workplace/Serotype_ST.out -o path_to_pneumo-pyper_workplace -tree path_to_tree_dir/18_genome_tree.nwk		
+	$ perl path_to_pneumo-typer/script/heatmap.pl -dir path_to_pneumo-pyper_workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf path_to_pneumo-pyper_workplace/result_statistics/Statistics_OUT/classification_CPS -e path_to_pneumo-pyper_workplace/Serotype_ST.out -o path_to_pneumo-pyper_workplace -tree path_to_18_genome_tree.nwk		
 
-	Creat a heatmap according to the distribution of the cps gene at gene level using the following command:
+	*Create a heatmap according to the distribution of the cps gene at gene level using the following command:
 
-	$ perl path_to_pneumo-typer/script/heatmap.pl -dir path_to_pneumo-pyper_workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf path_to_pneumo-pyper_workplace/result_statistics/Statistics_OUT/classification_CPS -e path_to_pneumo-pyper_workplace/Serotype_ST.out -o path_to_pneumo-pyper_workplace -tree path_to_tree_dir/18_genome_tree.nwk
+	$ perl path_to_pneumo-typer/script/heatmap.pl -dir path_to_pneumo-pyper_workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf path_to_pneumo-pyper_workplace/result_statistics/Statistics_OUT/classification_CPS -e path_to_pneumo-pyper_workplace/Serotype_ST.out -o path_to_pneumo-pyper_workplace -tree path_to_18_genome_tree.nwk
 
-	Creat a map of the genetic organlization of cps gene using the following command:
+	*Create a map of the genetic organlization of cps gene using the following command:
 	
-	perl path_to_pneumo-typer/script/cps_cluster.pl -dir /Users/zilinyang/Desktop/bioconda包推送/sFig -gene path_to_pneumo-pyper_workplace/cps_cluster_workplace/interested_gene.txt -m 10 -map T -o path_to_pneumo-pyper_workplace/cps_cluster_workplace -SVG T -n 40 -e path_to_pneumo-pyper_workplace/Serotype_ST.out -tree path_to_tree_dir/18_genome_tree.nwk
+	perl path_to_pneumo-typer/script/cps_cluster.pl -dir path_to_18_genomes_dir -gene path_to_pneumo-pyper_workplace/cps_cluster_workplace/interested_gene.txt -m 10 -map T -o path_to_pneumo-pyper_workplace/cps_cluster_workplace -SVG T -n 40 -e path_to_pneumo-pyper_workplace/Serotype_ST.out -tree path_to_18_genome_tree.nwk
 
 	
-#### Example 3: A two-column tab-delimited text file is used to sort genomes from up to down according to users requirement
+#### Example 3: A two-column tab-delimited text file is used to sort genomes from up to down according to users' requirement
 
 	Here, we provided a srf file "18_genome_order.txt" that order the maps by serotypes. For example, adding the parameter -srf to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to reorder genomes in the genetic organization of the cps cluster.
 
-	$ perl path_to_pneumo-typer/script/cps_cluster.pl -dir path_to_input_dir/18_genomes_dir -gene path_to_pneumo-pyper_workplace/cps_cluster_workplace/interested_gene.txt -m 10 -map T -o path_to_pneumo-pyper_workplace/cps_cluster_workplace -SVG T -n 40 -e path_to_pneumo-pyper_workplace/Serotype_ST.out -srf path_to_srf_dir/18_genome_order.txt
+	$ perl path_to_pneumo-typer/script/cps_cluster.pl -dir path_to_18_genomes_dir -gene path_to_pneumo-pyper_workplace/cps_cluster_workplace/interested_gene.txt -m 10 -map T -o path_to_pneumo-pyper_workplace/cps_cluster_workplace -SVG T -n 40 -e path_to_pneumo-pyper_workplace/Serotype_ST.out -srf path_to_18_genome_order.txt
 		  
 
 
@@ -212,7 +204,7 @@ Add the parameter -tree to the commands produced by pneumo-typer.pl ("map_cmd.tx
        -m, --mlst
            Perform mlst analysis (Default: T). 
        -c, --cgmlst
-           Perform cgmlst analysis. It need >10 mins for one genome (Default: F).
+           Perform cgmlst analysis. It needs >10 mins for one genome (Default: F).
        -Ts, --test
            Run pneumo-typer using Test_data as input to check whether pneumo-typer is installed successfully (Default: F).
        -V, --version
@@ -224,6 +216,6 @@ Add the parameter -tree to the commands produced by pneumo-typer.pl ("map_cmd.tx
 
 ## COPYRIGHT
 
-Dr. Xiangyang Li (E-mail: lixiangyang\@fudan.edu.cn, lixiangyang1984\@gmail.com), Kaili University; Bacterial Genome Data mining & Bioinformatic Analysis (http://www.microbialgenomic.com/).
+Dr. Xiangyang Li (E-mail: lixiangyang\@fudan.edu.cn, lixiangyang1984\@gmail.com), Kaili University; Bacterial Genome Data mining & Bioinformatic Analysis (http://www.microbialgenomic.cn/).
 
 Copyright 2023, Xiangyang Li. All Rights Reserved.
