@@ -34,13 +34,22 @@ Once the installation is finished, the absolute paths for blat, prodigal, blastn
 Installation of Pneumo-Typer can be accomplished by downloading the code (at https://www.microbialgenomic.cn/Pneumo-Typer.html and https://github.com/xiangyang1984/Pneumo-Typer.git) and then following the steps below.
 #### Step 1: Download source code
 Download Pneumo-Typer, and put the Pneumo-Typer directory into your PATH with the following command：
-```	
-$ wget -c https://www.microbialgenomic.cn/temp_dir/pneumo-typer-v1.0.1.tar.gz (Recommended
- to use)
-or
-$ git clone https://github.com/xiangyang1984/Pneumo-Typer.git
-$ export PATH=/path/to/Pneumo-Typer/:$PATH
-```
+
+	```	
+	$ wget -c https://www.microbialgenomic.cn/temp_dir/pneumo-typer-v1.0.1.tar.gz (Recommended to use)
+
+	or
+
+	$ git clone https://github.com/xiangyang1984/Pneumo-Typer.git
+
+	Pneumo-Typer contains two large size files which need to be downloaded manually.
+	* cgMLST_profiles
+	$ wget -c -O path_to_Pneumo-Typer/ST_tool/database/cgmlst/cgMLST_profiles https://media.githubusercontent.com/media/Xiangyang1984/Pneumo-Typer/main/ST_tool/database/cgmlst/cgMLST_profiles?download=true
+	* cgMLSA_loci.fas
+	$ wget -c -O path_to_Pneumo-Typer/ST_tool/database/cgmlst/cgMLSA_loci/cgMLSA_loci.fas https://media.githubusercontent.com/media/Xiangyang1984/Pneumo-Typer/main/ST_tool/database/cgmlst/cgMLSA_loci/cgMLSA_loci.fas?download=true
+
+	$ export PATH=/path/to/Pneumo-Typer/:$PATH
+	```
 
 #### Step 2: Perl modules installation
 Pneumo-Typer requires Perl as well as Perl modules including GD; GD::SVG, SVG; threads, File::Basename, FindBin, File::Spec, lib, Getopt::Long, Math::BigFloat, Storable, vars, Bio::SeqIO, Bio::Tree::NodeI, Bio::TreeIO, Parallel::Runner. 
