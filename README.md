@@ -1,106 +1,229 @@
-# Pneumo-Typer
-pneumo-typer: A fast and simple-to-use tool for predicting serotype and determining sequence type (ST/cgST) for Streptococcus pneumoniae
+Pneumo-Typer
+===
 
-pneumo-typer is a fast and simple-to-use tool for predicting serotype and determining sequence type (ST/cgST) for Streptococcus pneumoniae. It is freely available at http://www.microbialgenomic.cn/pneumo-typer.html and https://github.com/Xiangyang1984/pneumo-typer under an open source GPLv3 license. It is a stand-alone Perl application, which requires blat, NCBI BLAST+ and several Perl Modules (GD, GD::SVG) to be installed before use.
-
-When you use pneumo-typer, please cited:
-Xiangyang Li, Zilin Yang, Zhongrui Ma. pneumo-typer: A fast and simple-to-use tool for predicting serotype and determining sequence type (ST/cgST) for Streptococcus pneumoniae, Submitted to Bioinformatics, 2023XXXX.
-
-Software download: pneumo-typer_v1.03.tar.gz
-pneumo-typer User guide
-
-1. Installation
-=================
+Pneumo-Typer is a comprehensive prediction and visualization of serotype and sequence type for streptococcus pneumoniae using assembled genomes. It is freely available at https://www.microbialgenomic.cn/Pneumo-Typer.html and https://github.com/Xiangyang1984/Pneumo-Typer under an open source GPLv3 license.
 
 
-pneumo-typer is a Perl script which doesn't need compilation. But before running, pneumo-typer needs to pre-install prodigal, blat, blast, and several Perl modules. There are two ways to install the pneumo-typer.
+* [Installation](#installation)
 
-1.1-1 Installing the pneumo-typer via Conda
+ 	* [Installing the Pneumo-Typer via Conda](#installing-the-pneumo-typer-via-conda)
+	
+ 	* [Installing the Pneumo-Typer from Source Code](#installing-the-pneumo-typer-from-source-code)
+	
+ 	* [Test the Pneumo-Typer with Example Data](#test-the-pneumo-typer-with-example-data)
+	
+ * [Usage](#usage)
+ 
+ 	* [Preparation of Input Data](#preparation-of-input-data)
+	
+ 	* [Running pneumo-typer.pl](#running-pneumo-typer)
+	
+	* [Customization of the Figure](#customization-of-the-figure)
+	
+	* [Detailed Explanations for Arguments in pneumo-typer.pl](#detailed-explanations-for-arguments-in-pneumo-typer)
 
-We have build a bioconda package for pneumo-typer. Users are recommended to install the [conda](https://www.anaconda.com), then to install this package simply with the following command:
-$ conda install -c xiangyang1984 pneumo-typer
-**if occured "The environment is inconsistent, please check the package plan carefully", try to using "conda update --all" before install pneumo-typer.
 
-1.1-2 Installing the pneumo-typer from Source Code
+# Installation
 
-pneumo-typer is available at https://github.com/xiangyang1984/pneumo-typer.git. Installation pneumo-typer can be accomplished by downloading the code and then following the steps below.
-#### Step 1: Download source code Download pneumo-typer，and put the pneumo-typer directory into your PATH with the following command： ```
-$ git clone https://github.com/xiangyang1984/pneumo-typer.git
-$ export PATH=/path/to/pneumo-typer/:$PATH ```
+Pneumo-Typer is a Perl script which doesn't need compilation. But before running, Pneumo-Typer needs to pre-install prodigal, blat, blast, and several Perl modules. There are two ways to install the Pneumo-Typer.
+
+## Installing the Gcluster via Conda
+We have build a bioconda package for Pneumo-Typer. Users are recommended to install the [conda](https://www.anaconda.com), then to install this package simply with the following command:
+
+	$ conda install -c bioconda pneumo-typer
+
+Once installation finished, the absolute paths for blat, prodigal, blastn and makeblastdb have been auto-configured well for pneumo-typer.pl, so users should be able to run Pneumo-Typer.
+
+## Installing the Pneumo-Typer from Source Code
+Installation of Pneumo-Typer can be accomplished by downloading the code (at https://www.microbialgenomic.cn/Pneumo-Typer.html and https://github.com/xiangyang1984/Pneumo-Typer.git) and then following the steps below.
+#### Step 1: Download source code
+Download Pneumo-Typer，and put the Pneumo-Typer directory into your PATH with the following command：
+```	
+$ wget -c https://www.microbialgenomic.cn/temp_dir/pneumo-typer-v1.0.1.tar.gz (Recommended
+ to use)
+or
+$ git clone https://github.com/xiangyang1984/Gcluster.git
+$ export PATH=/path/to/Pneumo-Typer/:$PATH
+```
+
 #### Step 2: Perl modules installation
-The pneumo-typer requires Perl as well as Perl modules including GD; GD::SVG, SVG; threads, File::Basename, FindBin, File::Spec, lib, Getopt::Long, Math::BigFloat, Storable, vars, Bio::SeqIO, Bio::Tree::NodeI, Bio::TreeIO.
+Pneumo-Typer requires Perl as well as Perl modules including GD; GD::SVG, SVG; threads, File::Basename, FindBin, File::Spec, lib, Getopt::Long, Math::BigFloat, Storable, vars, Bio::SeqIO, Bio::Tree::NodeI, Bio::TreeIO, Parallel::Runner. 
+
 These modules can be installed with cpan using:
-$ sudo cpan install GD GD::SVG SVG threads File::Basenamey FindBin lib Getopt::Long Math::BigFloat Storable vars Bio::SeqIO Bio::Tree::NodeI Bio::TreeIO
+
+	$ sudo cpan install GD GD::SVG SVG threads File::Basenamey FindBin lib Getopt::Long Math::BigFloat Storable vars BioPerl Parallel::Runner
+
+
 #### Step 3: Programs installation
-Additional software dependencies for the pneumo-typer are as follows:
-* makeblastdb and blastn
+Additional software dependencies for the Pneumo-Typer are as follows:
+
+* makeblastdb and blastp  
 Both of them come from NCBI BLAST+, available at https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/
+
 * prodigal
 This software is available at http://micans.org/mcl/
+
 * blat
 This software is available at http://micans.org/mcl/
 
-1.2 Test the pneumo-typer with Example Data
 
-Once pneumo-typer installation finished, a small dataset in the **./test_data** directory can be used to test whether pneumo-typer (for **pneumo-typer.pl**) can run on your system (**Linux/MacOS**) successfully or not using the command as below:
-$ pneumo-typer -Ts T
+## Test the pneumo-typer with Example Data
+Once Pneumo-Typer installation is finished, a small dataset in the **./test_data** directory can be used to test whether Pneumo-Typer (**pneumo-typer.pl**) can run on your system (**Linux/MacOS**) successfully or not using the command as below:
+
+	$ perl pneumo-typer -Ts T
+	
+	Test-step1: Checks for pneumo-typer dependencies...
+	################################################################
+
+	Tue Feb 18 13:16:12 2020: Gcluster.pl start...
+
+	################################################################
+	***GD Version  2.71 ok.
+	***GD::SVG Version   0.33 ok.
+	***SVG Version   2.84 ok.
+	***threads Version   2.15 ok.
+	***File::Basename Version  2.85 ok.
+	***FindBin Version   1.51 ok.
+	***lib Version   0.63 ok.
+	***Getopt::Long Version  2.49 ok.
+	***Math::BigFloat Version  1.999806 ok.
+	***Storable Version  3.15 ok.
+	***vars Version  1.03 ok.
+	***File::Spec Version  3.75 ok.
+	***Bio::SeqIO Version  1.007002 ok.
+	***Bio::Tree::NodeI Version   ok.
+	***Bio::TreeIO Version   1.007002 ok.
+	***Parallel::Runner Version   0.013 ok.
+	!!!Ok, all dependencies Perl modulers are installed*
+	----------------------------------------------------------------
+	Checking for makeblastdb ... OK, makeblastdb is installed at: /miniconda3/bin//makeblastdb
+	Checking for blastn ... OK, blastn is installed at: /miniconda3/bin//blastn
+	Checking for prodigal ... OK, prodigal is installed at: /miniconda3/bin//prodigal
+	Checking for blat ... OK, blat is installed at: /miniconda3/bin//blat
+	################################################################
 
 
-test as the follow:
-Test-step1: Checks for pneumo-typer dependencies...
-################################################################
-***GD Version 2.71 ok.
-***GD::SVG Version 0.33 ok.
-***SVG Version 2.84 ok.
-***threads Version 2.15 ok.
-***File::Basename Version 2.85 ok.
-***FindBin Version 1.51 ok.
-***lib Version 0.63 ok.
-***Getopt::Long Version 2.49 ok.
-***Math::BigFloat Version 1.999806 ok.
-***Storable Version 3.15 ok.
-***vars Version 1.03 ok.
-***File::Spec Version 3.75 ok.
-***Bio::SeqIO Version 1.007002 ok.
-***Bio::Tree::NodeI Version ok.
-***Bio::TreeIO Version 1.007002 ok.
-!!!Ok, all dependencies Perl modulers are installed*
-----------------------------------------------------------------
-Checking for makeblastdb ... OK, makeblastdb is installed at: /miniconda3/bin//makeblastdb
-Checking for blastn ... OK, blastn is installed at: /miniconda3/bin//blastn
-Checking for prodigal ... OK, prodigal is installed at: /miniconda3/bin//prodigal
-Checking for blat ... OK, blat is installed at: /miniconda3/bin//blat
-################################################################
+	Test-step2: Begin test pneumo-typer.pl...
+	################################################################
+
+	Fri Jul 21 19:56:13 2023: pneumo-typer.pl start...
+
+	STEP-1: Dealing with genomes extract genome sequence, gene seqeunces and gene feature table (TFT);
+	annnotate genome which has no annotation infotmation using prodigal>
+	Annotating genome using prodigal: 20%...40%...60%...80%...100%...done
+
+	STEP-2: Determining the Sequence Type (ST)
+  
+	STEP-2.1: MLST analysis
+	Blastn_percent: 20%...40%...60%...80%...100%...done
+ 
+	STEP-2.2: cgMLST analysis
+	Blat_percent: 20%...40%...60%...80%...100%...done
+
+	STEP-3: Predicting serotype
+	Blastn_percent: 10%...20%...30%...40%...50%...60%...70%...80%...90%...100%...done
+
+	STEP-4: Output sequence type and serotype results
+
+	STEP-5: Heatmaping the cps gene distribution in genomes
+
+	STEP-6: Visualizing the cps gene cluster in each genome
+
+	Fri Jul 21 20:07:30 2023: done!
+
+	################################################################
+	Ok, pneumo-typer works success!
+
+ 
+
+# Usage
+
+It is very simple to use Pneumo-Typer. First, prepare input datas, at least containing Genbank_file_directory; then, run Pneumo-Typer like this "perl pneumo-typer.pl -d Genbank_file_directory". 
 
 
-Test-step2: Begin test pneumo-typer.pl...
-################################################################
+## Running Gcluster
 
-Fri Jul 21 19:56:13 2023: pneumo-typer.pl start...
+Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genomes is under a directory named "18_genomes_dir", which can be downloaded from website: www.microbialgenomic.cn/temp_dir/18_genomes.tar.gz.
 
-STEP-1: Dealing with genomes extract genome sequence, gene seqeunces and gene feature table (TFT);
-annnotate genome which has no annotation infotmation using prodigal>
-Annotating genome using prodigal: 20%...40%...60%...80%...100%...done
+#### Example 1: Run Pneumo-Typer is a easy task by using the following command
 
-STEP-2: Determining the Sequence Type (ST)
+This command will do serotype predict and create figures, and ST analysis with 10 threads. When finished, Pneumo-Typer will output results as follows:
+a.ST results
+b.predicted serotype results
+c.create three maps with the ST and predicted serotype and information showed 
+	heatmap_gene.svg: a heatmap of the distribution of cps gene at gene level;
+	heatmap_class.svg: a heatmap of the distribution of cps gene at class level;
+	cps_cluster.svg: a genetic organization of cps gene cluster
 
-STEP-2.1: MLST analysis
-Blastn_percent: 20%...40%...60%...80%...100%...done
+	$ perl pneumo-typer.pl -d 18_genomes_dir -t 10 -m T
+		
+Setting "-c" to "T" will perform cgST analysis that takes quite a long time, and the cgST information will also be showed on maps.
 
-STEP-2.2: cgMLST analysis
-Blat_percent: 20%...40%...60%...80%...100%...done
+#### Example 2: A Newick format tree file is used by Pneumo-Typer to automatically associate the distribution of cps gene and genetic organization of cps cluster with their phylogeny.
 
-STEP-3: Predicting serotype
-Blastn_percent: 10%...20%...30%...40%...50%...60%...70%...80%...90%...100%...done
+tree file: 18_genome_tree.nwk, it was a nwk format phylogenetic tree of 18 genomes using  
+RaxML. 
+Add the parameter -tree to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to mapping a nwk-format tree as follows:
 
-STEP-4: Output sequence type and serotype results
+	Creat a heatmap according to the distribution of the cps gene at class level using the following command:
 
-STEP-5: Heatmaping the cps gene distribution in genomes
+	$ perl path_to_pneumo-typer/script/heatmap.pl -dir path_to_pneumo-pyper_workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf path_to_pneumo-pyper_workplace/result_statistics/Statistics_OUT/classification_CPS -e path_to_pneumo-pyper_workplace/Serotype_ST.out -o path_to_pneumo-pyper_workplace -tree path_to_tree_dir/18_genome_tree.nwk		
 
-STEP-6: Visualizing the cps gene cluster in each genome
+	Creat a heatmap according to the distribution of the cps gene at gene level using the following command:
 
-Fri Jul 21 20:07:30 2023: done!
+	$ perl path_to_pneumo-typer/script/heatmap.pl -dir path_to_pneumo-pyper_workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf path_to_pneumo-pyper_workplace/result_statistics/Statistics_OUT/classification_CPS -e path_to_pneumo-pyper_workplace/Serotype_ST.out -o path_to_pneumo-pyper_workplace -tree path_to_tree_dir/18_genome_tree.nwk
 
-################################################################
-Ok, pneumo-typer works success!
-# Pneumo-Typer
+	Creat a map of the genetic organlization of cps gene using the following command:
+	
+	perl path_to_pneumo-typer/script/cps_cluster.pl -dir /Users/zilinyang/Desktop/bioconda包推送/sFig -gene path_to_pneumo-pyper_workplace/cps_cluster_workplace/interested_gene.txt -m 10 -map T -o path_to_pneumo-pyper_workplace/cps_cluster_workplace -SVG T -n 40 -e path_to_pneumo-pyper_workplace/Serotype_ST.out -tree path_to_tree_dir/18_genome_tree.nwk
+
+	
+#### Example 3: A two-column tab-delimited text file is used to sort genomes from up to down according to users requirement
+
+	Here, we provided a srf file "18_genome_order.txt" that order the maps by serotypes. For example, adding the parameter -srf to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to reorder genomes in the genetic organization of the cps cluster.
+
+	$ perl path_to_pneumo-typer/script/cps_cluster.pl -dir path_to_input_dir/18_genomes_dir -gene path_to_pneumo-pyper_workplace/cps_cluster_workplace/interested_gene.txt -m 10 -map T -o path_to_pneumo-pyper_workplace/cps_cluster_workplace -SVG T -n 40 -e path_to_pneumo-pyper_workplace/Serotype_ST.out -srf path_to_srf_dir/18_genome_order.txt
+		  
+
+
+ 
+## Detailed Explanations for Arguments in Pneumo-Typer
+
+```
+--------------
+    REQUIRED ARGUMENTS:
+    ~~~~~~~~~~~~~~~~~~~
+       -d, --genbank_file_directory
+           A directory containing files as GenBank format, FASTA format, or a combination of both.                           
+    OPTIONAL ARGUMENTS:
+    ~~~~~~~~~~~~~~~~~~~
+       -o, --output_directory
+           An output directory holding all the generated files by pneumo-typer.pl. if this option is not set,  a directory named "ipneumo-pyper_workplace" will be created in the bin directory from where pneumo-typer.pl was invoked.
+       -m, --multiple_threads
+           Set thread number (Default: 1)
+       -jb, --start_at_blast 
+           Jump to a local blastn analysis, and Skips sequencing extraction (Default: F).  
+       -hgc, --homologous_gene_cutoff
+           Set E-value, Identify, Coverage (Query and Subject), Match_length (alignment length) cutoff in Blastn analysis (default: E-value=1e-5, Identify=70, Coverage=95, Match_length=100).
+       -js, --jump_serotype
+           After blastn analysis, users can jump the process of doing blastn file to perform Serotype analysis again.
+       -p, --prodigal_annotation
+           Annotate all genomes using prodigal. 
+       -m, --mlst
+           Perform mlst analysis (Default: T). 
+       -c, --cgmlst
+           Perform cgmlst analysis. It need >10 mins for one genome (Default: F).
+       -Ts, --test
+           Run pneumo-typer using Test_data as input to check whether pneumo-typer is installed successfully (Default: F).
+       -V, --version
+           The version of pneumo-typer.
+       -h, --help
+           Show this message.
+
+```
+
+## COPYRIGHT
+
+Dr. Xiangyang Li (E-mail: lixiangyang\@fudan.edu.cn, lixiangyang1984\@gmail.com), Kaili University; Bacterial Genome Data mining & Bioinformatic Analysis (http://www.microbialgenomic.com/).
+
+Copyright 2023, Xiangyang Li. All Rights Reserved.
