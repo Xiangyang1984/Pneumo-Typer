@@ -38,7 +38,7 @@ Download Pneumo-Typer, and put the Pneumo-Typer directory into your PATH with th
 $ wget -c https://www.microbialgenomic.cn/temp_dir/pneumo-typer-v1.0.1.tar.gz (Recommended
  to use)
 or
-$ git clone https://github.com/xiangyang1984/Gcluster.git
+$ git clone https://github.com/xiangyang1984/Pneumo-Typer.git
 $ export PATH=/path/to/Pneumo-Typer/:$PATH
 ```
 
