@@ -14,7 +14,7 @@ Pneumo-Typer is a comprehensive prediction and visualization of serotype and seq
 	
  * [Usage](#usage)
 	
- 	* [Running Pneumo-Typer](#running-pneumo-typer)
+ 	* [Running Pneumo-Typer](#running-Pneumo-Typer)
 	
 	* [Detailed Explanations for Arguments in Pneumo-Typer](#detailed-explanations-for-arguments-in-Pneumo-Typer)
 
@@ -63,7 +63,7 @@ This software is available at http://micans.org/mcl/
 This software is available at http://micans.org/mcl/
 
 
-## Test the pneumo-typer with Example Data
+## Test the Pneumo-Typer with Example Data
 Once Pneumo-Typer installation is finished, a small dataset in the **./test_data** directory can be used to test whether Pneumo-Typer (**pneumo-typer.pl**) can run on your system (**Linux/MacOS**) successfully or not using the command as below:
 
 	$ perl pneumo-typer -Ts T
