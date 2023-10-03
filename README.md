@@ -149,11 +149,12 @@ This command will perform serotype prediction and figure creation, and ST analys
 
 	$ perl pneumo-typer.pl -d 18_genomes_dir -t 10 -m T
 		
-Setting "-c" to "T" will perform cgST analysis which takes quite a long time, and the cgST information will also be showed on maps.
+Setting "-c" to "T" will perform cgST analysis which takes quite a long time, and the cgST information will also be shown on maps.
 
 #### Example 2: A Newick format tree file is used by Pneumo-Typer to automatically associate the distribution of cps gene and genetic organization of cps cluster with their phylogeny.
 
-18_genome_tree.nwk: a tree file, it was a nwk format phylogenetic tree of 18 genomes using RaxML.
+18_genome_tree.nwk: a tree file, it was a nwk format phylogenetic tree of 18 genomes using RaxML. It can be downloaded from the website: www.microbialgenomic.cn/temp_dir/18_genome_tree.nwk.
+
 
 Add the parameter -tree to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to map the figures with a nwk-format tree as follows:
 
@@ -172,7 +173,7 @@ Add the parameter -tree to the commands produced by pneumo-typer.pl ("map_cmd.tx
 	
 #### Example 3: A two-column tab-delimited text file is used to sort genomes from up to down according to users' requirement
 
-	Here, we provided a srf file "18_genome_order.txt" that orders the maps by serotypes. For example, adding the parameter -srf to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to reorder genomes in the genetic organization of the cps cluster.
+	Here, we provided a srf file "18_genome_order.txt" (www.microbialgenomic.cn/temp_dir/18_genome_order.txt) that orders the maps by serotypes. For example, adding the parameter -srf to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to reorder genomes in the genetic organization of the cps cluster.
 
 	$ perl path_to_pneumo-typer/script/cps_cluster.pl -dir path_to_18_genomes_dir -gene path_to_pneumo-pyper_workplace/cps_cluster_workplace/interested_gene.txt -m 10 -map T -o path_to_pneumo-pyper_workplace/cps_cluster_workplace -SVG T -n 40 -e path_to_pneumo-pyper_workplace/Serotype_ST.out -srf path_to_18_genome_order.txt
 		  
