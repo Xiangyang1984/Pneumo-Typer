@@ -8,32 +8,32 @@ Pneumo-Typer is a comprehensive prediction and visualization of serotype and seq
 
  	* [Installing the Pneumo-Typer via Conda](#installing-the-Pneumo-Typer-via-conda)
 	
- 	* [Installing the Pneumo-Typer from Source Code](#installing-the-pneumo-typer-from-source-code)
+ 	* [Installing the Pneumo-Typer from Source Code](#installing-the-Pneumo-Typer-from-source-code)
 	
- 	* [Test the Pneumo-Typer with Example Data](#test-the-pneumo-typer-with-example-data)
+ 	* [Test the Pneumo-Typer with Example Data](#test-the-Pneumo-Typer-with-example-data)
 	
  * [Usage](#usage)
 	
- 	* [Running pneumo-typer.pl](#running-pneumo-typer)
+ 	* [Running Pneumo-Typer](#running-pneumo-typer)
 	
-	* [Detailed Explanations for Arguments in pneumo-typer.pl](#detailed-explanations-for-arguments-in-pneumo-typer)
+	* [Detailed Explanations for Arguments in Pneumo-Typer](#detailed-explanations-for-arguments-in-Pneumo-Typer)
 
 
 # Installation
 
-Pneumo-Typer is a Perl script which doesn't need compilation. But before running, Pneumo-Typer needs to pre-install prodigal, blat, blast, and several Perl modules. There are two ways to install the Pneumo-Typer.
+Pneumo-Typer is a Perl script that doesn't need compilation. But before running, Pneumo-Typer needs to pre-install prodigal, blat, blast, and several Perl modules. There are two ways to install the Pneumo-Typer.
 
 ## Installing the Pneumo-Typer via Conda
-We have build a bioconda package for Pneumo-Typer. Users are recommended to install the [conda](https://www.anaconda.com), then to install this package simply with the following command:
+We have built a bioconda package for Pneumo-Typer. Users are recommended to install the [conda](https://www.anaconda.com), and then install this package simply with the following command:
 
 	$ conda install -c bioconda pneumo-typer
 
-Once installation finished, the absolute paths for blat, prodigal, blastn and makeblastdb have been auto-configured well for pneumo-typer.pl, so users should be able to run Pneumo-Typer.
+Once the installation is finished, the absolute paths for blat, prodigal, blastn and makeblastdb have been auto-configured well for pneumo-typer.pl, so users should be able to run Pneumo-Typer.
 
 ## Installing the Pneumo-Typer from Source Code
 Installation of Pneumo-Typer can be accomplished by downloading the code (at https://www.microbialgenomic.cn/Pneumo-Typer.html and https://github.com/xiangyang1984/Pneumo-Typer.git) and then following the steps below.
 #### Step 1: Download source code
-Download Pneumo-Typer，and put the Pneumo-Typer directory into your PATH with the following command：
+Download Pneumo-Typer, and put the Pneumo-Typer directory into your PATH with the following command：
 ```	
 $ wget -c https://www.microbialgenomic.cn/temp_dir/pneumo-typer-v1.0.1.tar.gz (Recommended
  to use)
@@ -130,7 +130,7 @@ Once Pneumo-Typer installation is finished, a small dataset in the **./test_data
 
 # Usage
 
-It is very simple to use Pneumo-Typer. First, prepare input datas, at least containing Genbank_file_directory; then, run Pneumo-Typer like this "perl pneumo-typer.pl -d Genbank_file_directory". 
+It is very simple to use Pneumo-Typer. First, prepare input data, at least containing a Genbank_file_directory (containing files as GenBank format, FASTA format, or a combination of both); then, run Pneumo-Typer like this "perl pneumo-typer.pl -d Genbank_file_directory". 
 
 
 ## Running Pneumo-Typer
@@ -139,7 +139,7 @@ Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genom
 
 #### Example 1: Run Pneumo-Typer is an easy task by using the following command
 
-This command will do serotype predict and create figures, and ST analysis with 10 threads. When finished, Pneumo-Typer will output results as follows:
+This command will perform serotype prediction and figure creation, and ST analysis with 10 threads. When finished, Pneumo-Typer will output results as follows:
 * a.ST results
 * b.predicted serotype results
 * c.create three maps with the ST and predicted serotype and information showed 
@@ -153,30 +153,29 @@ Setting "-c" to "T" will perform cgST analysis which takes quite a long time, an
 
 #### Example 2: A Newick format tree file is used by Pneumo-Typer to automatically associate the distribution of cps gene and genetic organization of cps cluster with their phylogeny.
 
-tree file: 18_genome_tree.nwk, it was a nwk format phylogenetic tree of 18 genomes using  
-RaxML. 
-Add the parameter -tree to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to mapping a nwk-format tree as follows:
+18_genome_tree.nwk: a tree file, it was a nwk format phylogenetic tree of 18 genomes using RaxML.
 
-	*Create a heatmap according to the distribution of the cps gene at class level using the following command:
+Add the parameter -tree to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to map the figures with a nwk-format tree as follows:
+
+	*Create a heatmap according to the distribution of the cps gene at the class level using the following command:
 
 	$ perl path_to_pneumo-typer/script/heatmap.pl -dir path_to_pneumo-pyper_workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf path_to_pneumo-pyper_workplace/result_statistics/Statistics_OUT/classification_CPS -e path_to_pneumo-pyper_workplace/Serotype_ST.out -o path_to_pneumo-pyper_workplace -tree path_to_18_genome_tree.nwk		
 
-	*Create a heatmap according to the distribution of the cps gene at gene level using the following command:
+	*Create a heatmap according to the distribution of the cps gene at the gene level using the following command:
 
 	$ perl path_to_pneumo-typer/script/heatmap.pl -dir path_to_pneumo-pyper_workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf path_to_pneumo-pyper_workplace/result_statistics/Statistics_OUT/classification_CPS -e path_to_pneumo-pyper_workplace/Serotype_ST.out -o path_to_pneumo-pyper_workplace -tree path_to_18_genome_tree.nwk
 
-	*Create a map of the genetic organlization of cps gene using the following command:
+	*Create a map of the genetic organization of cps gene using the following command:
 	
-	perl path_to_pneumo-typer/script/cps_cluster.pl -dir path_to_18_genomes_dir -gene path_to_pneumo-pyper_workplace/cps_cluster_workplace/interested_gene.txt -m 10 -map T -o path_to_pneumo-pyper_workplace/cps_cluster_workplace -SVG T -n 40 -e path_to_pneumo-pyper_workplace/Serotype_ST.out -tree path_to_18_genome_tree.nwk
+	$ perl path_to_pneumo-typer/script/cps_cluster.pl -dir path_to_18_genomes_dir -gene path_to_pneumo-pyper_workplace/cps_cluster_workplace/interested_gene.txt -m 10 -map T -o path_to_pneumo-pyper_workplace/cps_cluster_workplace -SVG T -n 40 -e path_to_pneumo-pyper_workplace/Serotype_ST.out -tree path_to_18_genome_tree.nwk
 
 	
 #### Example 3: A two-column tab-delimited text file is used to sort genomes from up to down according to users' requirement
 
-	Here, we provided a srf file "18_genome_order.txt" that order the maps by serotypes. For example, adding the parameter -srf to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to reorder genomes in the genetic organization of the cps cluster.
+	Here, we provided a srf file "18_genome_order.txt" that orders the maps by serotypes. For example, adding the parameter -srf to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to reorder genomes in the genetic organization of the cps cluster.
 
 	$ perl path_to_pneumo-typer/script/cps_cluster.pl -dir path_to_18_genomes_dir -gene path_to_pneumo-pyper_workplace/cps_cluster_workplace/interested_gene.txt -m 10 -map T -o path_to_pneumo-pyper_workplace/cps_cluster_workplace -SVG T -n 40 -e path_to_pneumo-pyper_workplace/Serotype_ST.out -srf path_to_18_genome_order.txt
 		  
-
 
  
 ## Detailed Explanations for Arguments in Pneumo-Typer
@@ -190,11 +189,11 @@ Add the parameter -tree to the commands produced by pneumo-typer.pl ("map_cmd.tx
     OPTIONAL ARGUMENTS:
     ~~~~~~~~~~~~~~~~~~~
        -o, --output_directory
-           An output directory holding all the generated files by pneumo-typer.pl. if this option is not set,  a directory named "ipneumo-pyper_workplace" will be created in the bin directory from where pneumo-typer.pl was invoked.
+           An output directory holding all the generated files by pneumo-typer.pl. if this option is not set,  a directory named "pneuma-pyper_workplace" will be created in the bin directory from where pneumo-typer.pl was invoked.
        -m, --multiple_threads
            Set thread number (Default: 1)
        -jb, --start_at_blast 
-           Jump to a local blastn analysis, and Skips sequencing extraction (Default: F).  
+           Jump to a local blastn analysis, and skip sequencing extraction (Default: F).  
        -hgc, --homologous_gene_cutoff
            Set E-value, Identify, Coverage (Query and Subject), Match_length (alignment length) cutoff in Blastn analysis (default: E-value=1e-5, Identify=70, Coverage=95, Match_length=100).
        -js, --jump_serotype
