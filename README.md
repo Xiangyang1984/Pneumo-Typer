@@ -42,7 +42,7 @@ Download Pneumo-Typer, and put the Pneumo-Typer directory into your PATH with th
 
 	$ git clone https://github.com/xiangyang1984/Pneumo-Typer.git
 
-	Pneumo-Typer contains two large size files which need to be downloaded manually.
+	***Pneumo-Typer contains two large size files which need to be downloaded manually.
 	* cgMLST_profiles
 	$ wget -c -O path_to_Pneumo-Typer/ST_tool/database/cgmlst/cgMLST_profiles https://media.githubusercontent.com/media/Xiangyang1984/Pneumo-Typer/main/ST_tool/database/cgmlst/cgMLST_profiles?download=true
 	* cgMLSA_loci.fas
