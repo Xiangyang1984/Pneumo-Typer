@@ -62,13 +62,16 @@ These modules can be installed with cpan using:
 #### Step 3: Programs installation
 Additional software dependencies for the Pneumo-Typer are as follows:
 
-* makeblastdb and blastp  
+* makeblastdb and blastp
+  
 Both of them come from NCBI BLAST+, available at https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/
 
 * prodigal
+
 This software is available at http://micans.org/mcl/
 
 * blat
+  
 This software is available at http://micans.org/mcl/
 
 
