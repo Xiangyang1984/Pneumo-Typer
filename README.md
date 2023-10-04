@@ -36,7 +36,7 @@ Installation of Pneumo-Typer can be accomplished by downloading the code (at htt
 Download Pneumo-Typer, and put the Pneumo-Typer directory into your PATH with the following command：
 
 	```	
-	$ wget -c https://www.microbialgenomic.cn/temp_dir/pneumo-typer-v1.0.1.tar.gz (Recommended to use)
+	$ wget -c https://www.microbialgenomic.cn/gz/pneumo-typer-v1.0.1.tar.gz (Recommended to use)
 
 	or
 
@@ -147,7 +147,7 @@ It is very simple to use Pneumo-Typer. First, prepare input data, at least conta
 
 ## Running Pneumo-Typer
 
-Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genomes is under a directory named "18_genomes_dir", which can be downloaded from website: www.microbialgenomic.cn/temp_dir/18_genomes.tar.gz.
+Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genomes are under a directory named ["18_genomes_dir"](www.microbialgenomic.cn/temp_dir/18_genomes.tar.gz).
 
 #### Example 1: Run Pneumo-Typer is an easy task by using the following command
 
