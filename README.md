@@ -147,7 +147,7 @@ It is very simple to use Pneumo-Typer. First, prepare input data, at least conta
 
 ## Running Pneumo-Typer
 
-Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genomes are under a directory named "18_genomes_dir"(downoload [18_genomes.tar.gz](https://www.microbialgenomic.cn/temp_dir/18_genomes.tar.gz)).
+Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genomes are under a directory named "18_genomes_dir"([downoload 18_genomes.tar.gz](https://www.microbialgenomic.cn/temp_dir/18_genomes.tar.gz)).
 
 #### Example 1: Run Pneumo-Typer is an easy task by using the following command
 
@@ -184,7 +184,7 @@ Add the parameter -tree to the commands produced by pneumo-typer.pl ("map_cmd.tx
 	
 #### Example 3: A two-column tab-delimited text file is used to sort genomes from up to down according to users' requirement
 
-Here, we provided a srf file ["18_genome_order.txt"](https://www.microbialgenomic.cn/temp_dir/18_genome_order.txt) that orders the maps by serotypes. For example, adding the parameter -srf to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to reorder genomes in the genetic organization of the cps cluster.
+Here, we provided a srf file named ["18_genome_order.txt"](https://www.microbialgenomic.cn/temp_dir/18_genome_order.txt) that orders the maps by serotypes. For example, adding the parameter -srf to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to reorder genomes in the genetic organization of the cps cluster.
 
 	$ perl path_to_pneumo-typer/script/cps_cluster.pl -dir path_to_18_genomes_dir -gene path_to_pneumo-pyper_workplace/cps_cluster_workplace/interested_gene.txt -m 10 -map T -o path_to_pneumo-pyper_workplace/cps_cluster_workplace -SVG T -n 40 -e path_to_pneumo-pyper_workplace/Serotype_ST.out -srf path_to_18_genome_order.txt
 		  
