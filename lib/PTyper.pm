@@ -1269,7 +1269,7 @@ sub check_tool {
     my $check_g = system ("perl $script -d $dir -t 10 -m T -c T -p T");
     print "################################################################\n";
     if ($check_g eq 0){
-        print "Ok, pneumo-typer works success!\n\n";
+        print "Ok, pneumo-typer works successfully!!\n\n";
     }else {
         print "Not Ok, pneumo-typer works with some errors!\n\n";
     }
@@ -1280,7 +1280,7 @@ sub check_tool {
 #check Perl modules dependencies;
 sub check_perl_modules {
  
-    my @test_modules = ("GD", "GD::SVG", "SVG", "threads", "File::Basename", "FindBin", "lib", "Getopt::Long", "Math::BigFloat", "Storable", "vars", "File::Spec", "Bio::SeqIO", "Bio::Tree::NodeI", "Bio::TreeIO", "Parallel::Runner");
+    my @test_modules = ("GD", "GD::SVG", "SVG", "threads", "File::Basename", "FindBin", "lib", "Getopt::Long", "Math::BigFloat", "Storable", "vars", "File::Spec", "Bio::SeqIO", "Bio::Tree::NodeI", "Bio::TreeIO");
 
     my $check_number=0;
     foreach (@test_modules){
@@ -1376,8 +1376,8 @@ sub batch_genomenucleotide_extract_run {
     my $sub_file_number = scalar @dir;
     print "    Genomenucleotide_extract_percent: ";
 
-    use Parallel::Runner;
-    my $runner = Parallel::Runner->new($thread_number);
+    use Para::Runner;
+    my $runner = Para::Runner->new($thread_number);
 
     foreach my $file(@dir){
 
@@ -1449,8 +1449,8 @@ sub batch_genenucleotide_TFT_extract_run {
     my $job_number=0;
     my $sub_file_number = scalar @path_genbank;
     print "    Genenucleotide_TFT_extract_percent: ";
-    use Parallel::Runner;
-    my $runner = Parallel::Runner->new($thread_number);
+    use Para::Runner;
+    my $runner = Para::Runner->new($thread_number);
  
     foreach my $file_genbank(@path_genbank){ 
         $file_genbank =~ s/ /_/g;
@@ -1613,8 +1613,8 @@ sub prodigal_bacth_run {
     my $job_number=0;
 
     print "    Annotating genome using prodigal: ";
-    use Parallel::Runner;
-    my $runner = Parallel::Runner->new($thread_number);
+    use Para::Runner;
+    my $runner = Para::Runner->new($thread_number);
 
     foreach(sort @input_dir){
         my $input = "$input_dir/$_";
@@ -1659,8 +1659,8 @@ sub bacth_blast_best_run {
     my $sub_file_number =  scalar @path_gene;
     my $job_number=0;
     print "    Blastn_percent: ";
-    use Parallel::Runner;
-    my $runner = Parallel::Runner->new($thread_number);
+    use Para::Runner;
+    my $runner = Para::Runner->new($thread_number);
 
     foreach my $eachfile (@path_gene) {
         my $input = "$path_gene/$eachfile";  
