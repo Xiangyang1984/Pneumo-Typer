@@ -6,6 +6,9 @@ use warnings;
 use threads;
 use File::Basename qw<basename dirname>;
 use vars qw(@loci_name);
+use FindBin;
+use lib "$FindBin::Bin/lib";
+
 #my $now_time = localtime;
 #print "\n$now_time: start...\n\n";
 
@@ -64,8 +67,8 @@ sub bacth_blat_run {
     my $sub_file_number =  scalar @input;
     my $job_number=0;
     print "    Blat_percent: ";
-    use Parallel::Runner;
-    my $runner = Parallel::Runner->new($thread_number);
+    use Para::Runner;
+    my $runner = Para::Runner->new($thread_number);
     foreach (@input){
         my $input = "$path_fa/$_";  
         my @a = ("SPNE00213.fas", "cgMLSA_loci.fas");

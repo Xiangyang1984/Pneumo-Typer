@@ -3,6 +3,8 @@
 use strict;
 use warnings;
 use threads;
+use FindBin;
+use lib "$FindBin::Bin/lib";
 
 my $temp_protein_folder = $ARGV[0];
 my $mlsa_folder = $ARGV[1];
@@ -64,8 +66,8 @@ sub bacth_blast_run {
     my $job_number=0;
     print "    Blastn_percent: ";
 
-    use Parallel::Runner;
-    my $runner = Parallel::Runner->new($thread_number);
+    use Para::Runner;
+    my $runner = Para::Runner->new($thread_number);
 
     foreach (@input){
         my $progress_record = int (($job_number/$sub_file_number)*100);
