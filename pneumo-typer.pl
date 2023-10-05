@@ -34,7 +34,7 @@ perl [absolute path to] pneumo-typer.pl -d Test_data -t 10  -p T -srf /Users/zil
     REQUIRED ARGUMENTS:
     ~~~~~~~~~~~~~~~~~~~
        -d, --genbank_file_directory
-           A directory containing files as GenBank format, FASTA format, or a combination of both.                           
+           A directory containing files in GenBank format, FASTA format, or a combination of both.                           
     OPTIONAL ARGUMENTS:
     ~~~~~~~~~~~~~~~~~~~
        -o, --output_directory
@@ -169,9 +169,11 @@ mkdir $path_gene;
 my $directory_TFT = $workplace."/Whole_TFT"; 
 mkdir $directory_TFT;
 
+my $map_cmd = $workplace."/map_cmd.txt"; 
+open (MAP_CMD, ">$map_cmd");
 
 if ($options{start_at_blast} eq "F"){
-    print "STEP-1: Dealing with genomes <extract genome sequence, gene seqeunces and gene feature table (TFT); annnotate genome which has no annotation infotmation using prodigal>\n";
+    print "STEP-1: Dealing with genomes extract genome sequence, gene sequences and gene feature table (TFT); annotate genome which has no annotation information using prodigal>\n";
 
     &PTyper::batch_genomenucleotide_extract_run ($path_genbank, $path_fa1, $path_fa2, $thread_number);
 
@@ -260,6 +262,9 @@ system ("perl $home_directory/script/mcr.pl $workplace/CPS_cluster_mapping.resul
 
 my $cmd_3 = "perl $home_directory/script/cps_cluster.pl -dir $path_genbank -gene $gcluster_workplace/interested_gene.txt -m $thread_number -map T -o $gcluster_workplace -SVG T -n 40 -e $workplace/Serotype_ST.out";
 system ("$cmd_3"); 
+
+print MAP_CMD "heatmap_class:\n$cmd_1\n\nheatmap_gene:\n$cmd_2\n\ncps gene cluster:\n$cmd_3\n";
+close MAP_CMD;
 
 my $finish_time = localtime;
 print "\n$finish_time: done!\n\n";
