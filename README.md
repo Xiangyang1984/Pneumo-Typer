@@ -1,7 +1,7 @@
 Pneumo-Typer
 ===
 
-Pneumo-Typer is a comprehensive prediction and visualization of serotype and sequence type for streptococcus pneumoniae using assembled genomes. It is freely available at https://www.microbialgenomic.cn/Pneumo-Typer.html and https://github.com/Xiangyang1984/Pneumo-Typer under an open source GPLv3 license.
+Pneumo-Typer is a comprehensive prediction and visualization of serotype and sequence type for streptococcus pneumoniae using assembled genomes. It is freely available at https://www.microbialgenomic.cn/Pneumo-Typer.html and https://github.com/Xiangyang1984/Pneumo-Typer under an open-source GPLv3 license.
 
 
 * [Installation](#installation)
@@ -42,7 +42,7 @@ Download Pneumo-Typer, and put the Pneumo-Typer directory into your PATH with th
 
 	$ git clone https://github.com/xiangyang1984/Pneumo-Typer.git
 
-	***Pneumo-Typer contains two large size files which need to be downloaded manually.
+	***Pneumo-Typer contains two large-size files which need to be downloaded manually.
 	* cgMLST_profiles
 	$ wget -c -O path_to_Pneumo-Typer/ST_tool/database/cgmlst/cgMLST_profiles https://media.githubusercontent.com/media/Xiangyang1984/Pneumo-Typer/main/ST_tool/database/cgmlst/cgMLST_profiles?download=true
 	* cgMLSA_loci.fas
@@ -52,11 +52,11 @@ Download Pneumo-Typer, and put the Pneumo-Typer directory into your PATH with th
 	```
 
 #### Step 2: Perl modules installation
-Pneumo-Typer requires Perl as well as Perl modules including GD; GD::SVG, SVG; threads, File::Basename, FindBin, File::Spec, lib, Getopt::Long, Math::BigFloat, Storable, vars, Bio::SeqIO, Bio::Tree::NodeI, Bio::TreeIO, Parallel::Runner. 
+Pneumo-Typer requires Perl as well as Perl modules including GD; GD::SVG, SVG; threads, File::Basename, FindBin, File::Spec, lib, Getopt::Long, Math::BigFloat, Storable, vars, Bio::SeqIO, Bio::Tree::NodeI, Bio::TreeIO. 
 
 These modules can be installed with cpan using:
 
-	$ sudo cpan install GD GD::SVG SVG threads File::Basenamey FindBin lib Getopt::Long Math::BigFloat Storable vars BioPerl Parallel::Runner
+	$ sudo cpan install GD GD::SVG SVG threads File::Basenamey FindBin lib Getopt::Long Math::BigFloat Storable vars BioPerl
 
 
 #### Step 3: Programs installation
@@ -97,7 +97,6 @@ Once Pneumo-Typer installation is finished, a small dataset in the **./test_data
 	***Bio::SeqIO Version  1.007002 ok.
 	***Bio::Tree::NodeI Version   ok.
 	***Bio::TreeIO Version   1.007002 ok.
-	***Parallel::Runner Version   0.013 ok.
 	!!!Ok, all dependencies Perl modulers are installed*
 	----------------------------------------------------------------
 	Checking for makeblastdb ... OK, makeblastdb is installed at: /miniconda3/bin//makeblastdb
@@ -112,8 +111,8 @@ Once Pneumo-Typer installation is finished, a small dataset in the **./test_data
 
 	Fri Jul 21 19:56:13 2023: pneumo-typer.pl start...
 
-	STEP-1: Dealing with genomes extract genome sequence, gene seqeunces and gene feature table (TFT);
-	annnotate genome which has no annotation infotmation using prodigal>
+	STEP-1: Dealing with genomes extract genome sequence, gene sequences and gene feature table (TFT);
+	annotate genome which has no annotation information using prodigal>
 	Annotating genome using prodigal: 20%...40%...60%...80%...100%...done
 
 	STEP-2: Determining the Sequence Type (ST)
@@ -136,13 +135,13 @@ Once Pneumo-Typer installation is finished, a small dataset in the **./test_data
 	Fri Jul 21 20:07:30 2023: done!
 
 	################################################################
-	Ok, pneumo-typer works success!
+	Ok, pneumo-typer works successfully!
 
  
 
 # Usage
 
-It is very simple to use Pneumo-Typer. First, prepare input data, at least containing a Genbank_file_directory (containing files as GenBank format, FASTA format, or a combination of both); then, run Pneumo-Typer like this "perl pneumo-typer.pl -d Genbank_file_directory". 
+It is very simple to use Pneumo-Typer. First, prepare input data, at least containing a Genbank_file_directory (containing files in GenBank format, FASTA format, or a combination of both); then, run Pneumo-Typer like this "perl pneumo-typer.pl -d Genbank_file_directory". 
 
 
 ## Running Pneumo-Typer
@@ -151,7 +150,7 @@ Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genom
 
 #### Example 1: Run Pneumo-Typer is an easy task by using the following command
 
-This command will perform serotype prediction and figure creation, and ST analysis with 10 threads. When finished, Pneumo-Typer will output results as follows:
+This command will perform serotype prediction, figure creation, and ST analysis with 10 threads. When finished, Pneumo-Typer will output results as follows:
 * a.ST results
 * b.predicted serotype results
 * c.create three maps with the ST and predicted serotype and information showed 
@@ -197,7 +196,7 @@ Here, we provided a srf file named ["18_genome_order.txt"](https://www.microbial
     REQUIRED ARGUMENTS:
     ~~~~~~~~~~~~~~~~~~~
        -d, --genbank_file_directory
-           A directory containing files as GenBank format, FASTA format, or a combination of both.                           
+           A directory containing files in GenBank format, FASTA format, or a combination of both.                           
     OPTIONAL ARGUMENTS:
     ~~~~~~~~~~~~~~~~~~~
        -o, --output_directory
