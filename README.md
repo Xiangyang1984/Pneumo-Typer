@@ -150,6 +150,11 @@ Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genom
 
 #### Example 1: Run Pneumo-Typer is an easy task by using the following command
 
+
+*Create a map of the genetic organization of cps gene using the following command:
+	
+	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -Rf T -tree path_to_18_genome_tree.nwk
+ 
 This command will perform serotype prediction, figure creation, and ST analysis with 10 threads. When finished, Pneumo-Typer will output results as follows:
 * a.ST results
 * b.predicted serotype results
