@@ -62,17 +62,17 @@ These modules can be installed with cpan using:
 #### Step 3: Programs installation
 Additional software dependencies for the Pneumo-Typer are as follows:
 
-* makeblastdb and blastp
+* makeblastdb and blastn
   
 Both of them come from NCBI BLAST+, available at https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/
 
 * prodigal
 
-This software is available at http://micans.org/mcl/
+This software is available at https://github.com/hyattpd/Prodigal
 
 * blat
   
-This software is available at http://micans.org/mcl/
+This software is available at https://genome.ucsc.edu/FAQ/FAQblat.html
 
 
 ## Test the Pneumo-Typer with Example Data
@@ -149,16 +149,13 @@ It is very simple to use Pneumo-Typer. First, prepare input data, at least conta
 Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genomes are under a directory named "18_genomes_dir"([downoload 18_genomes.tar.gz](https://www.microbialgenomic.cn/temp_dir/18_genomes.tar.gz)).
 
 #### Example 1: Run Pneumo-Typer is an easy task by using the following command
-
-
-*Perform serotype prediction, heatmap and figure creation, and ST analysis with 10 threads:
 	
 	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -t 10 -m T
  
-Pneumo-Typer will output results as follows:
-* a.ST results
-* b.predicted serotype results
-* c.create three maps with the ST and predicted serotype and information showed
+Pneumo-Typer will perform serotype prediction, heatmap and figure creation, and ST analysis with 10 threads, output results as follows:
+* a. ST results
+* b. predicted serotype results
+* c. create three maps with the ST and predicted serotype and information showed
 
 	*heatmap_gene.svg: a heatmap of the distribution of cps gene at gene level;
   
