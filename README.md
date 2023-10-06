@@ -24,25 +24,25 @@ Pneumo-Typer is a comprehensive prediction and visualization of serotype and seq
 Pneumo-Typer is a Perl script that doesn't need compilation. But before running, Pneumo-Typer needs to pre-install prodigal, blat, blast, and several Perl modules. There are two ways to install the Pneumo-Typer.
 
 ## Installing the Pneumo-Typer via Conda
-We have built a bioconda package for Pneumo-Typer. Users are recommended to install the [conda](https://www.anaconda.com), and then install this package simply with the following command:
+We have built a bioconda package for Pneumo-Typer v1.0.2. Users are recommended to install the [conda](https://www.anaconda.com), and then install this package simply with the following command:
 
 	$ conda install -c bioconda pneumo-typer
 
 Once the installation is finished, the absolute paths for blat, prodigal, blastn and makeblastdb have been auto-configured well for pneumo-typer.pl, so users should be able to run Pneumo-Typer.
 
 ## Installing the Pneumo-Typer from Source Code
-Installation of Pneumo-Typer can be accomplished by downloading the code (at https://www.microbialgenomic.cn/Pneumo-Typer.html and https://github.com/xiangyang1984/Pneumo-Typer.git) and then following the steps below.
+Installation of Pneumo-Typer can be accomplished by downloading the code (at https://www.microbialgenomic.cn/Pneumo-Typer.html and https://github.com/xiangyang1984/Pneumo-Typer) and then following the steps below.
 #### Step 1: Download source code
 Download Pneumo-Typer, and put the Pneumo-Typer directory into your PATH with the following command：
 
 	```	
-	$ wget -c https://www.microbialgenomic.cn/gz/pneumo-typer-v1.0.1.tar.gz (Recommended to use)
+	$ wget -c https://www.microbialgenomic.cn/gz/pneumo-typer-v1.0.2.tar.gz (***Recommended to use***)
 
 	or
 
 	$ git clone https://github.com/xiangyang1984/Pneumo-Typer.git
 
-	***Pneumo-Typer contains two large-size files which need to be downloaded manually.
+	***Pneumo-Typer contains two large-size files which need to be downloaded manually***.
 	* cgMLST_profiles
 	$ wget -c -O path_to_Pneumo-Typer/ST_tool/database/cgmlst/cgMLST_profiles https://media.githubusercontent.com/media/Xiangyang1984/Pneumo-Typer/main/ST_tool/database/cgmlst/cgMLST_profiles?download=true
 	* cgMLSA_loci.fas
@@ -157,9 +157,9 @@ Pneumo-Typer will perform serotype prediction, heatmap and figure creation, and 
 * b. predicted serotype results
 * c. create three maps with the ST and predicted serotype and information showed
 
-	*heatmap_gene.svg: a heatmap of the distribution of cps gene at gene level;
+	*heatmap_gene.svg: a heatmap of the distribution of cps gene at gene level
   
-	*heatmap_class.svg: a heatmap of the distribution of cps gene at class level;
+	*heatmap_class.svg: a heatmap of the distribution of cps gene at class level
   
 	*cps_cluster.svg: a figure showing the genetic organization of cps gene cluster
 		
@@ -174,7 +174,7 @@ Setting "-c" to "T" will perform cgST analysis which takes quite a long time, an
 
 	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -Rh T -tree path_to_18_genome_tree.nwk		
 
-*Create a map of the genetic organization of cps gene using the following command:
+*Create a figure of the genetic organization of cps gene using the following command:
 	
 	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -Rf T -tree path_to_18_genome_tree.nwk
 
