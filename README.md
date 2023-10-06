@@ -198,7 +198,7 @@ Here, we provided a srf file named ["18_genome_order.txt"](https://www.microbial
     OPTIONAL ARGUMENTS:
     ~~~~~~~~~~~~~~~~~~~
 	-o, --output_directory
-           An output directory holding all the generated files by pneumo-typer.pl. if this option is not set,  a directory named "ipneumo-pyper_workplace" will be created in the bin directory from where pneumo-typer.pl was invoked.
+           An output directory holding all the generated files by pneumo-typer.pl. if this option is not set,  a directory named "pneumo-pyper_workplace" will be created in the bin directory from where pneumo-typer.pl was invoked.
        -t, --multiple_threads
            Set thread number (Default: 1)
        -Ss, --skip_sequence_processing 
