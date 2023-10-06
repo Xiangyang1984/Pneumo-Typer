@@ -1,8 +1,6 @@
 #!/bin/bash
 set -x -e
 
-cpan -i Child
-cpan -i Parallel-Runner
 RM_DIR=${PREFIX}/share/pneumo-typer
 mkdir -p ${RM_DIR}
 mkdir -p ${PREFIX}/bin
