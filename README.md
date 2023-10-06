@@ -151,23 +151,17 @@ Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genom
 #### Example 1: Run Pneumo-Typer is an easy task by using the following command
 
 
-*Create a map of the genetic organization of cps gene using the following command:
+*Perform serotype prediction, heatmap and figure creation, and ST analysis with 10 threads:
 	
 	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -t 10 -m T
  
-This command will perform serotype prediction, figure creation, and ST analysis with 10 threads. When finished, Pneumo-Typer will output results as follows:
+Pneumo-Typer will output results as follows:
 * a.ST results
 * b.predicted serotype results
 * c.create three maps with the ST and predicted serotype and information showed 
 	*heatmap_gene.svg: a heatmap of the distribution of cps gene at gene level;
 	*heatmap_class.svg: a heatmap of the distribution of cps gene at class level;
 	*cps_cluster.svg: a genetic organization of cps gene cluster
-	
-	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -t 10 -m T
-*Create two heatmaps according to the distribution of the cps gene at the gene and class level using the following command:
-
-	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -t 10 -m T
-
 		
 Setting "-c" to "T" will perform cgST analysis which takes quite a long time, and the cgST information will also be shown on maps.
 
