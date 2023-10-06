@@ -159,6 +159,9 @@ This command will perform serotype prediction, figure creation, and ST analysis 
 	*cps_cluster.svg: a genetic organization of cps gene cluster
 	
 	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -t 10 -m T
+*Create two heatmaps according to the distribution of the cps gene at the gene and class level using the following command:
+
+	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -t 10 -m T	
 
 		
 Setting "-c" to "T" will perform cgST analysis which takes quite a long time, and the cgST information will also be shown on maps.
