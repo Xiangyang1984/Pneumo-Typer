@@ -1,6 +1,6 @@
 {% set name = "pneumo-typer" %}
 {% set version = "1.0.2" %}
-{% set sha256 = "f2a496cd6b7bb955030ab9bed522925a00c2d6750ea236714ee41f8b63d8a492" %}
+{% set sha256 = "d82c76e64ec84353a0178a6db55a07d8b5b06b4f48ac5d0c54a3f718938f343f" %}
 
 package:
   name: "{{ name|lower }}"
@@ -15,7 +15,6 @@ build:
   noarch: generic
   run_exports:
     - {{ pin_subpackage('pneumo-typer', max_pin="x") }}
-  script:
 requirements:
 
   #channels:
