@@ -158,7 +158,8 @@ Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genom
 Pneumo-Typer will output results as follows:
 * a.ST results
 * b.predicted serotype results
-* c.create three maps with the ST and predicted serotype and information showed 
+* c.create three maps with the ST and predicted serotype and information showed
+
 	*heatmap_gene.svg: a heatmap of the distribution of cps gene at gene level;
   
 	*heatmap_class.svg: a heatmap of the distribution of cps gene at class level;
