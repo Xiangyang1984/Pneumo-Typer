@@ -160,8 +160,10 @@ Pneumo-Typer will output results as follows:
 * b.predicted serotype results
 * c.create three maps with the ST and predicted serotype and information showed 
 	*heatmap_gene.svg: a heatmap of the distribution of cps gene at gene level;
+  
 	*heatmap_class.svg: a heatmap of the distribution of cps gene at class level;
-	*cps_cluster.svg: a genetic organization of cps gene cluster
+  
+	*cps_cluster.svg: a figure showing the genetic organization of cps gene cluster
 		
 Setting "-c" to "T" will perform cgST analysis which takes quite a long time, and the cgST information will also be shown on maps.
 
