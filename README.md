@@ -165,27 +165,22 @@ Setting "-c" to "T" will perform cgST analysis which takes quite a long time, an
 #### Example 2: A Newick format tree file is used by Pneumo-Typer to automatically associate the distribution of cps gene and genetic organization of cps cluster with their phylogeny.
 
 [18_genome_tree.nwk](https://www.microbialgenomic.cn/temp_dir/18_genome_tree.nwk): a tree file, it was a nwk format phylogenetic tree of 18 genomes using RaxML. 
+ 
 
-Add the parameter -tree to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to map the figures with a nwk-format tree as follows: 
+*Create two heatmaps according to the distribution of the cps gene at the gene and class level using the following command:
 
-*Create a heatmap according to the distribution of the cps gene at the class level using the following command:
-
-	$ perl path_to_pneumo-typer/script/heatmap.pl -dir path_to_pneumo-pyper_workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf path_to_pneumo-pyper_workplace/result_statistics/Statistics_OUT/classification_CPS -e path_to_pneumo-pyper_workplace/Serotype_ST.out -o path_to_pneumo-pyper_workplace -tree path_to_18_genome_tree.nwk		
-
-*Create a heatmap according to the distribution of the cps gene at the gene level using the following command:
-
-	$ perl path_to_pneumo-typer/script/heatmap.pl -dir path_to_pneumo-pyper_workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf path_to_pneumo-pyper_workplace/result_statistics/Statistics_OUT/classification_CPS -e path_to_pneumo-pyper_workplace/Serotype_ST.out -o path_to_pneumo-pyper_workplace -tree path_to_18_genome_tree.nwk
+	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -Rh T -Rh T -tree path_to_18_genome_tree.nwk		
 
 *Create a map of the genetic organization of cps gene using the following command:
 	
-	$ perl path_to_pneumo-typer/script/cps_cluster.pl -dir path_to_18_genomes_dir -gene path_to_pneumo-pyper_workplace/cps_cluster_workplace/interested_gene.txt -m 10 -map T -o path_to_pneumo-pyper_workplace/cps_cluster_workplace -SVG T -n 40 -e path_to_pneumo-pyper_workplace/Serotype_ST.out -tree path_to_18_genome_tree.nwk
+	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -Rf T -tree path_to_18_genome_tree.nwk
 
 	
 #### Example 3: A two-column tab-delimited text file is used to sort genomes from up to down according to users' requirement
 
-Here, we provided a srf file named ["18_genome_order.txt"](https://www.microbialgenomic.cn/temp_dir/18_genome_order.txt) that orders the maps by serotypes. For example, adding the parameter -srf to the commands produced by pneumo-typer.pl ("map_cmd.txt" located in "pneumo-pyper_workplace") to reorder genomes in the genetic organization of the cps cluster.
+Here, we provided a srf file named ["18_genome_order.txt"](https://www.microbialgenomic.cn/temp_dir/18_genome_order.txt) that orders the maps by serotypes. For example, users can reorder genomes in the genetic organization of the cps cluster.
 
-	$ perl path_to_pneumo-typer/script/cps_cluster.pl -dir path_to_18_genomes_dir -gene path_to_pneumo-pyper_workplace/cps_cluster_workplace/interested_gene.txt -m 10 -map T -o path_to_pneumo-pyper_workplace/cps_cluster_workplace -SVG T -n 40 -e path_to_pneumo-pyper_workplace/Serotype_ST.out -srf path_to_18_genome_order.txt
+	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -Rf T -srf path_to_18_genome_order.txt
 		  
 
  
@@ -199,26 +194,34 @@ Here, we provided a srf file named ["18_genome_order.txt"](https://www.microbial
            A directory containing files in GenBank format, FASTA format, or a combination of both.                           
     OPTIONAL ARGUMENTS:
     ~~~~~~~~~~~~~~~~~~~
-       -o, --output_directory
-           An output directory holding all the generated files by pneumo-typer.pl. if this option is not set,  a directory named "pneuma-pyper_workplace" will be created in the bin directory from where pneumo-typer.pl was invoked.
-       -m, --multiple_threads
+	-o, --output_directory
+           An output directory holding all the generated files by pneumo-typer.pl. if this option is not set,  a directory named "ipneumo-pyper_workplace" will be created in the bin directory from where pneumo-typer.pl was invoked.
+       -t, --multiple_threads
            Set thread number (Default: 1)
-       -jb, --start_at_blast 
-           Jump to a local blastn analysis, and skip sequencing extraction (Default: F).  
+       -Ss, --skip_sequence_processing 
+           Skip the process of sequence processing (STEP-1) (Default: F).  
        -hgc, --homologous_gene_cutoff
            Set E-value, Identify, Coverage (Query and Subject), Match_length (alignment length) cutoff in Blastn analysis (default: E-value=1e-5, Identify=70, Coverage=95, Match_length=100).
-       -js, --jump_serotype
-           After blastn analysis, users can jump the process of doing blastn file to perform Serotype analysis again.
+       -Sb, --skip_blastn
+           Skip the process of doing blastn during serotype analysis.
        -p, --prodigal_annotation
            Annotate all genomes using prodigal. 
        -m, --mlst
            Perform mlst analysis (Default: T). 
        -c, --cgmlst
-           Perform cgmlst analysis. It needs >10 mins for one genome (Default: F).
+           Perform cgmlst analysis. It need >10 mins for one genome (Default: F).
+       -Rh, --recreate_heatmap                             
+           Re-create the heatmap of cps gene distribution in genomes (Default: F). At this step, users can add a parameter "phylogenetic_tree" or "strain_reorder_file". 
+       -Rf, --recreate_figure
+           Re-create the figure of the genetic organlization of cps gene cluster for genomes (Default: F). At this step, users can add a parameter "phylogenetic_tree" or "strain_reorder_file".
+       -tree, --phylogenetic_tree
+           A Newick format tree file is used by Pneumo-Typer to automatically accociate the genomes with their phylogeny. Meanwhile, Pneumo-Typer will output a file named "temp_strain_reorder_file", which contains the order information of genomes in tree from up to down. It should be noted that all nodes name in provided tree must completely match with the genbank files name of all genomes.
+       -srf, --strain_reorder_file
+           A two-column tab-delimited text file is used to sort genomes from up to down accoding to users requirement. Each row must consist of a strain name followed by the numerical order that is used for sorting genomes. It should be noted that all strains name must completely match with the genbank files name of all genomes.
        -Ts, --test
-           Run pneumo-typer using Test_data as input to check whether pneumo-typer is installed successfully (Default: F).
+           Run pneumo-typer using Test_data as input to check whether Pneumo-Typer is installed successfully (Default: F).
        -V, --version
-           The version of pneumo-typer.
+           The version of Pneumo-Typer.
        -h, --help
            Show this message.
 
