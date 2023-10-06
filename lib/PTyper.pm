@@ -1684,5 +1684,49 @@ sub bacth_blast_best_run {
 
 
 
+sub obtain_map_cmd {
+
+    my ($map_cmd, $tref)  = @_;
+    my %options = %$tref;
+
+    open (MAP_CMD, $map_cmd);
+    my @cmd; 
+    while(<MAP_CMD>){
+        chomp;
+        next unless $_ =~ /^perl/;
+        push @cmd, $_;
+
+    }
+    close MAP_CMD;
+
+
+    my ($remap_cmd1, $remap_cmd2, $remap_cmd3);
+
+    if (defined $options{phylogenetic_tree}){
+
+        $remap_cmd1 = $cmd[0]." -tree ".$options{phylogenetic_tree}; 
+        $remap_cmd2 = $cmd[1]." -tree ".$options{phylogenetic_tree};
+        $remap_cmd3 = $cmd[2]." -tree ".$options{phylogenetic_tree};
+
+    }elsif (defined $options{strain_reorder_file}){
+
+        $remap_cmd1 = $cmd[0]." -srf ".$options{strain_reorder_file}; 
+        $remap_cmd2 = $cmd[1]." -srf ".$options{strain_reorder_file};
+        $remap_cmd3 = $cmd[2]." -srf ".$options{strain_reorder_file};
+    
+    }else{
+
+        $remap_cmd1 = $cmd[0];
+        $remap_cmd2 = $cmd[1];
+        $remap_cmd3 = $cmd[2];
+
+    }
+
+    return $remap_cmd1, $remap_cmd2, $remap_cmd3;
+
+}
+
+
+
 1;               
 __END__  
