@@ -24,7 +24,7 @@ Pneumo-Typer is a comprehensive prediction and visualization of serotype and seq
 Pneumo-Typer is a Perl script that doesn't need compilation. But before running, Pneumo-Typer needs to pre-install prodigal, blat, blast, and several Perl modules. There are two ways to install the Pneumo-Typer.
 
 ## Installing the Pneumo-Typer via Conda
-We have built a bioconda package for Pneumo-Typer v1.0.2. Users are recommended to install the [conda](https://www.anaconda.com), and then install this package simply with the following command:
+We have built a bioconda package for Pneumo-Typer v1.0.1. Users are recommended to install the [conda](https://www.anaconda.com), and then install this package simply with the following command:
 
 	$ conda install -c bioconda pneumo-typer
 
@@ -36,7 +36,7 @@ Installation of Pneumo-Typer can be accomplished by downloading the code (at htt
 Download Pneumo-Typer, and put the Pneumo-Typer directory into your PATH with the following command：
 
 	```	
-	$ wget -c https://www.microbialgenomic.cn/gz/pneumo-typer-v1.0.2.tar.gz (***Recommended to use***)
+	$ wget -c https://www.microbialgenomic.cn/gz/pneumo-typer-v1.0.1.tar.gz (***Recommended to use***)
 
 	or
 
@@ -78,7 +78,7 @@ This software is available at https://genome.ucsc.edu/FAQ/FAQblat.html
 ## Test the Pneumo-Typer with Example Data
 Once Pneumo-Typer installation is finished, a small dataset in the **./test_data** directory can be used to test whether Pneumo-Typer (**pneumo-typer.pl**) can run on your system (**Linux/MacOS**) successfully or not using the command as below:
 
-	$ perl pneumo-typer -Ts T
+	$ perl pneumo-typer.pl -Ts T
 	
 	Test-step1: Checks for pneumo-typer dependencies...
 	################################################################
