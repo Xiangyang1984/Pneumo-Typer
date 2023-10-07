@@ -111,20 +111,21 @@ Once Pneumo-Typer installation is finished, a small dataset in the **./test_data
 
 	Fri Jul 21 19:56:13 2023: pneumo-typer.pl start...
 
-	STEP-1: Dealing with genomes extract genome sequence, gene sequences and gene feature table (TFT);
-	annotate genome which has no annotation information using prodigal>
-	Annotating genome using prodigal: 20%...40%...60%...80%...100%...done
+	STEP-1: Dealing with genomes extract genome sequence, gene sequences and gene feature table (TFT); annotate genome which has no annotation information using prodigal>
+	  Annotating genome using prodigal: 50%...100%...done
+	  Genenucleotide_TFT_extract_percent: 50%...100%...done
 
-	STEP-2: Determining the Sequence Type (ST)
+	STEP-2: Determining the sequence type (ST/cgST)
   
 	STEP-2.1: MLST analysis
-	Blastn_percent: 20%...40%...60%...80%...100%...done
+	  Blastn_percent: 50%...100%...done
  
 	STEP-2.2: cgMLST analysis
-	Blat_percent: 20%...40%...60%...80%...100%...done
+	  Blat_percent: 50%...100%...done
 
 	STEP-3: Predicting serotype
-	Blastn_percent: 10%...20%...30%...40%...50%...60%...70%...80%...90%...100%...done
+	  Blastn_percent: 50%...100%...done
+	  Process data and obtain serotype...done
 
 	STEP-4: Output sequence type and serotype results
 
@@ -163,7 +164,7 @@ Pneumo-Typer will perform serotype prediction, heatmap and figure creation, and 
   
 	*cps_cluster.svg: a figure showing the genetic organization of cps gene cluster
 		
-Setting "-c" to "T" will perform cgST analysis which takes quite a long time, and the cgST information will also be shown on maps.
+Setting "-c" to "T" will perform cgST analysis which takes quite a long time (about 3 min for one genome), and the cgST information will also be shown on maps.
 
 #### Example 2: A Newick format tree file is used by Pneumo-Typer to automatically associate the distribution of cps gene and genetic organization of cps cluster with their phylogeny.
 
@@ -212,7 +213,7 @@ Here, we provided a srf file named ["18_genome_order.txt"](https://www.microbial
        -m, --mlst
            Perform mlst analysis (Default: T). 
        -c, --cgmlst
-           Perform cgmlst analysis. It need >10 mins for one genome (Default: F).
+           Perform cgmlst analysis. It need about 3 mins for one genome (Default: F).
        -Rh, --recreate_heatmap                             
            Re-create the heatmap of cps gene distribution in genomes (Default: F). At this step, users can add a parameter "phylogenetic_tree" or "strain_reorder_file". 
        -Rf, --recreate_figure
