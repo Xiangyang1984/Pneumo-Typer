@@ -76,7 +76,7 @@ This software is available at https://genome.ucsc.edu/FAQ/FAQblat.html
 
 
 ## Test the Pneumo-Typer with Example Data
-Once Pneumo-Typer installation is finished, a small dataset in the **./test_data** directory can be used to test whether Pneumo-Typer (**pneumo-typer.pl**) can run on your system (**Linux/MacOS**) successfully or not using the command as below:
+Once Pneumo-Typer installation is finished, a small dataset in the **./Test_data** directory can be used to test whether Pneumo-Typer (**pneumo-typer.pl**) can run on your system (**Linux/MacOS**) successfully or not using the command as below:
 
 	$ perl pneumo-typer.pl -Ts T
 	
