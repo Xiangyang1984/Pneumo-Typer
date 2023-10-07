@@ -38,7 +38,7 @@ perl pneumo-typer.pl -d Test_data -t 10  -p T
     OPTIONAL ARGUMENTS:
     ~~~~~~~~~~~~~~~~~~~
        -o, --output_directory
-           An output directory holding all the generated files by pneumo-typer.pl. if this option is not set,  a directory named "ipneumo-pyper_workplace" will be created in the bin directory from where pneumo-typer.pl was invoked.
+           An output directory holding all the generated files by pneumo-typer.pl. if this option is not set,  a directory named "pneumo-pyper_workplace" will be created in the bin directory from where pneumo-typer.pl was invoked.
        -t, --multiple_threads
            Set thread number (Default: 1)
        -Ss, --skip_sequence_processing 
@@ -52,7 +52,7 @@ perl pneumo-typer.pl -d Test_data -t 10  -p T
        -m, --mlst
            Perform mlst analysis (Default: T). 
        -c, --cgmlst
-           Perform cgmlst analysis. It need >10 mins for one genome (Default: F).
+           Perform cgmlst analysis. It need about 3 mins for one genome (Default: F).
        -Rh, --recreate_heatmap                             
            Re-create the heatmap of cps gene distribution in genomes (Default: F). At this step, users can add a parameter "phylogenetic_tree" or "strain_reorder_file". 
        -Rf, --recreate_figure
@@ -185,108 +185,109 @@ mkdir $path_gene;
 my $directory_TFT = $workplace."/Whole_TFT"; 
 mkdir $directory_TFT;
 
-$options{skip_sequence_processing} = "F" if $options{skip_blastn} eq "F";
+$options{skip_sequence_processing} = "T" if $options{skip_blastn} eq "T";
 
 my $map_cmd = $workplace."/map_cmd.txt"; #store command to creat heatmap and figure
 
 if ( ($options{recreate_heatmap} eq "F")  && ($options{recreate_figure} eq "F") ){
 
+    system("rm -rf $workplace/result_statistics") if -d "$workplace/result_statistics"; #clear folder "result_statistics"
 
-if ($options{skip_sequence_processing} eq "F"){
-    print "STEP-1: Dealing with genomes extract genome sequence, gene sequences and gene feature table (TFT); annotate genome which has no annotation information using prodigal>\n";
+    if ($options{skip_sequence_processing} eq "F"){
+        print "STEP-1: Dealing with genomes extract genome sequence, gene sequences and gene feature table (TFT); annotate genome which has no annotation information using prodigal>\n";
 
-    &PTyper::batch_genomenucleotide_extract_run ($path_genbank, $path_fa1, $path_fa2, $thread_number);
+        &PTyper::batch_genomenucleotide_extract_run ($path_genbank, $path_fa1, $path_fa2, $thread_number);
 
-    &PTyper::batch_genenucleotide_TFT_extract_run ($path_genbank, $directory_TFT, $path_gene, $thread_number, $prodigal_annotation, $path_fa1) if $prodigal_annotation eq "F";
+        &PTyper::batch_genenucleotide_TFT_extract_run ($path_genbank, $directory_TFT, $path_gene, $thread_number, $prodigal_annotation, $path_fa1) if $prodigal_annotation eq "F";
 
-    &PTyper::prodigal_bacth_run ($path_fa1, $path_gene, $directory_TFT, $thread_number, $prodigal_annotation) if $prodigal_annotation eq "T";
-}
-
-
-print "\nSTEP-2: Determining the Sequence Type (ST/cgST)\n" if ( ($options{mlst} eq "T") or ($options{cgmlst} eq "T") );
-
-if ($options{mlst} eq "T") {
-    print "  \nSTEP-2.1: MLST analysis\n";
-    system ("perl $home_directory/ST_tool/ST_profile.pl $path_genbank $path_gene $home_directory/ST_tool/database/mlst $thread_number $workplace/ST_workplace");
-}
+        &PTyper::prodigal_bacth_run ($path_fa1, $path_gene, $directory_TFT, $thread_number, $prodigal_annotation) if $prodigal_annotation eq "T";
+    }
 
 
-if ($options{cgmlst} eq "T") {
-    print "  \nSTEP-2.2: cgMLST analysis\n";
+    print "\nSTEP-2: Determining the sequence type (ST/cgST)\n" if ( ($options{mlst} eq "T") or ($options{cgmlst} eq "T") );
+
+    if ($options{mlst} eq "T") {
+        print "  \nSTEP-2.1: MLST analysis\n";
+        system ("perl $home_directory/ST_tool/ST_profile.pl $path_genbank $path_gene $home_directory/ST_tool/database/mlst $thread_number $workplace/ST_workplace");
+    }
+
+
+    if ($options{cgmlst} eq "T") {
+        print "  \nSTEP-2.2: cgMLST analysis\n";
     system ("perl $home_directory/ST_tool/ST_profile_cg.pl $path_genbank $path_fa2 $home_directory/ST_tool/database/cgmlst $thread_number $workplace/ST_workplace");
-}
+    }
 
  
-print "\nSTEP-3: Predicting serotype\n";
-my ($e_value, $identify, $coverage, $match_length) = split /,/, $options{homologous_gene_cutoff};
-my $best_output = "$workplace/BEST.BLASTOUT";
-my $blastn_out_dir = "$workplace/blastn_out_dir";
-mkdir $blastn_out_dir;
+    print "\nSTEP-3: Predicting serotype\n";
+    my ($e_value, $identify, $coverage, $match_length) = split /,/, $options{homologous_gene_cutoff};
+    my $best_output = "$workplace/BEST.BLASTOUT";
+    my $blastn_out_dir = "$workplace/blastn_out_dir";
+    mkdir $blastn_out_dir;
+    
+    &PTyper::bacth_blast_best_run ($workplace, $path_gene, $blastn_out_dir, $db_file, $e_value, $blastn, $makeblastdb, $thread_number) if $options{skip_blastn} eq "F";
 
-&PTyper::bacth_blast_best_run ($workplace, $path_gene, $blastn_out_dir, $db_file, $e_value, $blastn, $makeblastdb, $thread_number) if $options{skip_blastn} eq "F";
-chdir $blastn_out_dir;
-system ("find . -type f -name '*.blastout' | xargs cat > $best_output") if $options{skip_blastn} eq "F";  # For large number of files, directly using cat may causing error
+    print "    Process data and obtain serotype...";
+    chdir $blastn_out_dir;
+    system ("find . -type f -name '*.blastout' | xargs cat > $best_output") if $options{skip_blastn} eq "F";  # For large number of files, directly using cat may causing error
 
-my $all_vs_all_cluster = PTyper::blast_filter ($best_output, $e_value, $identify, $coverage, $match_length);
-
-
-############################################################
-############################################################
-my $map_table = "$workplace/CPS_Mapping_table.txt";
-&PTyper::SARG_map_transformation($db_file, $mappingList, $map_table);
-
-my $cluster_mapping;
-$cluster_mapping = "$workplace/CPS_cluster_mapping.result";
-&PTyper::mapping ($map_table, $all_vs_all_cluster, $cluster_mapping);
+    my $all_vs_all_cluster = PTyper::blast_filter ($best_output, $e_value, $identify, $coverage, $match_length);
 
 
-############################################################
-############################################################
+    ############################################################
+    ############################################################
+    my $map_table = "$workplace/CPS_Mapping_table.txt";
+    &PTyper::SARG_map_transformation($db_file, $mappingList, $map_table);
 
-&PTyper::result_statistics($workplace, $directory_TFT, $cluster_mapping);
+    my $cluster_mapping;
+    $cluster_mapping = "$workplace/CPS_cluster_mapping.result";
+    &PTyper::mapping ($map_table, $all_vs_all_cluster, $cluster_mapping);
+    ############################################################
+    ############################################################
 
-system ("perl $home_directory/script/serotype_correct.pl $home_directory/DATABASE/serotype_matrix.txt $workplace/result_statistics/Statistics_OUT/CPS_LocusTag_statistics $workplace/Serotype.out");
+    &PTyper::result_statistics($workplace, $directory_TFT, $cluster_mapping);
+
+    system ("perl $home_directory/script/serotype_correct.pl $home_directory/DATABASE/serotype_matrix.txt $workplace/result_statistics/Statistics_OUT/CPS_LocusTag_statistics $workplace/Serotype.out");
+
+    print "done\n"; #serotype prediction finished
+
+    print "\nSTEP-4: Output sequence type and serotype results\n";
+
+    system ("perl $home_directory/script/ser_join_ST.pl $workplace/Serotype.out $workplace/ST_out.txt $workplace/cgST_out.txt $workplace/Serotype_ST.out");
 
 
-print "\nSTEP-4: Output sequence type and serotype results\n";
 
-system ("perl $home_directory/script/ser_join_ST.pl $workplace/Serotype.out $workplace/ST_out.txt $workplace/cgST_out.txt $workplace/Serotype_ST.out");
+    ### Visualizing the result
+    ##########################
 
+    open (MAP_CMD, ">$map_cmd");
 
+    print "\nSTEP-5: Heatmaping the cps gene distribution in genomes\n";
+    my $cmd_1 ="perl $home_directory/script/heatmap.pl -dir $workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf $workplace/result_statistics/Statistics_OUT/classification_CPS -e $workplace/Serotype_ST.out -o $workplace";
+    system ("$cmd_1"); 
 
-### Visualizing the result
-##########################
+    my $cmd_2 ="perl $home_directory/script/heatmap.pl -dir $workplace/result_statistics/tbl_heatmap_gene -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf $workplace/result_statistics/Statistics_OUT/classification_gene -e $workplace/Serotype_ST.out -o $workplace";
+    system ("$cmd_2"); 
 
+    print "\nSTEP-6: Visualizing the cps gene cluster for genomes\n";
 
-open (MAP_CMD, ">$map_cmd");
+    my $gcluster_workplace = "$workplace/cps_cluster_workplace";
+    mkdir $gcluster_workplace;
+    my $subtft = "$gcluster_workplace/Sub_TFT";
+    mkdir $subtft;
+    #obtain interested gene and sub TFT files, in which gene distance from (20 kb) cps genes were removed; 
+    #only genome having the number of cps gene > 1 is shown 
+    system ("perl $home_directory/script/interested_gene.pl $home_directory/DATABASE/gene.txt $workplace/Serotype.out $workplace/result_statistics/tbl_part $gcluster_workplace/interested_gene.txt $subtft 20000 1");
 
-print "\nSTEP-5: Heatmaping the cps gene distribution in genomes\n";
-my $cmd_1 ="perl $home_directory/script/heatmap.pl -dir $workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf $workplace/result_statistics/Statistics_OUT/classification_CPS -e $workplace/Serotype_ST.out -o $workplace";
-system ("$cmd_1"); 
+    #obtain homologs cluster
+    my $homologs_cluster = "$gcluster_workplace/blast_homologs_cluster";
+    mkdir $homologs_cluster;
+    system ("perl $home_directory/script/mcr.pl $workplace/CPS_cluster_mapping.result $homologs_cluster/all_orthomcl.out");
 
-my $cmd_2 ="perl $home_directory/script/heatmap.pl -dir $workplace/result_statistics/tbl_heatmap_gene -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf $workplace/result_statistics/Statistics_OUT/classification_gene -e $workplace/Serotype_ST.out -o $workplace";
-system ("$cmd_2"); 
+    my $cmd_3 = "perl $home_directory/script/cps_cluster.pl -dir $path_genbank -gene $gcluster_workplace/interested_gene.txt -m $thread_number -map T -o $gcluster_workplace -SVG T -n 40 -e $workplace/Serotype_ST.out";
+    system ("$cmd_3"); 
 
-print "\nSTEP-6: Visualizing the cps gene cluster for genomes\n";
-
-my $gcluster_workplace = "$workplace/cps_cluster_workplace";
-mkdir $gcluster_workplace;
-my $subtft = "$gcluster_workplace/Sub_TFT";
-mkdir $subtft;
-#obtain interested gene and sub TFT files, in which gene distance from (20 kb) cps genes were removed; 
-#only genome having the number of cps gene > 1 is shown 
-system ("perl $home_directory/script/interested_gene.pl $home_directory/DATABASE/gene.txt $workplace/Serotype.out $workplace/result_statistics/tbl_part $gcluster_workplace/interested_gene.txt $subtft 20000 1");
-
-#obtain homologs cluster
-my $homologs_cluster = "$gcluster_workplace/blast_homologs_cluster";
-mkdir $homologs_cluster;
-system ("perl $home_directory/script/mcr.pl $workplace/CPS_cluster_mapping.result $homologs_cluster/all_orthomcl.out");
-
-my $cmd_3 = "perl $home_directory/script/cps_cluster.pl -dir $path_genbank -gene $gcluster_workplace/interested_gene.txt -m $thread_number -map T -o $gcluster_workplace -SVG T -n 40 -e $workplace/Serotype_ST.out";
-system ("$cmd_3"); 
-
-print MAP_CMD "heatmap_class:\n$cmd_1\n\nheatmap_gene:\n$cmd_2\n\ncps gene cluster:\n$cmd_3\n";
-close MAP_CMD;
+    print MAP_CMD "heatmap_class:\n$cmd_1\n\nheatmap_gene:\n$cmd_2\n\ncps gene cluster:\n$cmd_3\n";
+    close MAP_CMD;
 
 }
 
@@ -296,7 +297,7 @@ my ($remap_cmd1, $remap_cmd2, $remap_cmd3) = &PTyper::obtain_map_cmd ($map_cmd, 
 #remap heatmap
 if ($options{recreate_heatmap} eq "T"){
 
-    print "\nRe-create the heatmap of cps gene distribution in genomes (STEP-5)\n\n";
+    print "\n    Re-create the heatmap of cps gene distribution in genomes (STEP-5)\n\n";
     system ("$remap_cmd1");
     system ("$remap_cmd2");
 
@@ -305,7 +306,7 @@ if ($options{recreate_heatmap} eq "T"){
 #remap figure
 if ($options{recreate_figure} eq "T"){
 
-    print "\nRe-create the figure of the genetic organlization of cps gene cluster for genomes (STEP-6)\n\n";
+    print "\n    Re-create the figure of the genetic organlization of cps gene cluster for genomes (STEP-6)\n\n";
     system ("$remap_cmd3");
 
 }
