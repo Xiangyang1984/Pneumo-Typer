@@ -38,7 +38,7 @@ Download Pneumo-Typer, and put the Pneumo-Typer directory into your PATH with th
 	```
 	$ wget -c https://www.microbialgenomic.cn/gz/pneumo-typer-v1.0.1.tar.gz (***Recommended to use***)
 
-	$ git clone https://github.com/xiangyang1984/Pneumo-Typer.git (***not Recommended to use***)
+	$ git clone https://github.com/xiangyang1984/Pneumo-Typer.git (***Not recommended to use***)
  
 	***In case of downloading Source Code through git, two large-size files of Pneumo-Typer need to be downloaded manually.***.
 	* cgMLST_profiles
