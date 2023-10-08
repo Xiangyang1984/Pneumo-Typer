@@ -213,13 +213,13 @@ Here, we provided a srf file named ["18_genome_order.txt"](https://www.microbial
        -m, --mlst
            Perform mlst analysis (Default: T). 
        -c, --cgmlst
-           Perform cgmlst analysis. It need about 3 mins for one genome (Default: F).
+           Perform cgmlst analysis. It needs about 3 mins for one genome (Default: F).
        -Rh, --recreate_heatmap                             
            Re-create the heatmap of cps gene distribution in genomes (Default: F). At this step, users can add a parameter "phylogenetic_tree" or "strain_reorder_file". 
        -Rf, --recreate_figure
            Re-create the figure of the genetic organization of cps gene cluster for genomes (Default: F). At this step, users can add a parameter "phylogenetic_tree" or "strain_reorder_file".
        -tree, --phylogenetic_tree
-           A Newick format tree file is used by Pneumo-Typer to automatically associate the genomes with their phylogeny. Meanwhile, Pneumo-Typer will output a file named "temp_strain_reorder_file", which contains the order information of genomes in the tree from up to down. It should be noted that all nodes name in the provided tree must completely match the input file names of all genomes.
+           A Newick format tree file is used by Pneumo-Typer to automatically associate the genomes with their phylogeny. Meanwhile, Pneumo-Typer will output a file named "temp_strain_reorder_file", which contains the order information of genomes in the tree from up to down. It should be noted that all node names in the provided tree must completely match the input file names of all genomes.
        -srf, --strain_reorder_file
            A two-column tab-delimited text file is used to sort genomes from up to down according to users' requirements. Each row must consist of a strain name followed by the numerical order that is used for sorting genomes. It should be noted that all strain names must completely match the input file names of all genomes.
        -Ts, --test
