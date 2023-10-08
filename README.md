@@ -199,7 +199,7 @@ Here, we provided a srf file named ["18_genome_order.txt"](https://www.microbial
     OPTIONAL ARGUMENTS:
     ~~~~~~~~~~~~~~~~~~~
 	-o, --output_directory
-           An output directory holding all the generated files by pneumo-typer.pl. if this option is not set,  a directory named "pneumo-pyper_workplace" will be created in the bin directory from where pneumo-typer.pl was invoked.
+           An output directory holding all the generated files by pneumo-typer.pl. if this option is not set,  a directory named "pneumo-typer_workplace" will be created in the bin directory from where pneumo-typer.pl was invoked.
        -t, --multiple_threads
            Set thread number (Default: 1)
        -Ss, --skip_sequence_processing 
@@ -217,11 +217,11 @@ Here, we provided a srf file named ["18_genome_order.txt"](https://www.microbial
        -Rh, --recreate_heatmap                             
            Re-create the heatmap of cps gene distribution in genomes (Default: F). At this step, users can add a parameter "phylogenetic_tree" or "strain_reorder_file". 
        -Rf, --recreate_figure
-           Re-create the figure of the genetic organlization of cps gene cluster for genomes (Default: F). At this step, users can add a parameter "phylogenetic_tree" or "strain_reorder_file".
+           Re-create the figure of the genetic organization of cps gene cluster for genomes (Default: F). At this step, users can add a parameter "phylogenetic_tree" or "strain_reorder_file".
        -tree, --phylogenetic_tree
-           A Newick format tree file is used by Pneumo-Typer to automatically accociate the genomes with their phylogeny. Meanwhile, Pneumo-Typer will output a file named "temp_strain_reorder_file", which contains the order information of genomes in tree from up to down. It should be noted that all nodes name in provided tree must completely match with the genbank files name of all genomes.
+           A Newick format tree file is used by Pneumo-Typer to automatically associate the genomes with their phylogeny. Meanwhile, Pneumo-Typer will output a file named "temp_strain_reorder_file", which contains the order information of genomes in the tree from up to down. It should be noted that all nodes name in the provided tree must completely match the input file names of all genomes.
        -srf, --strain_reorder_file
-           A two-column tab-delimited text file is used to sort genomes from up to down accoding to users requirement. Each row must consist of a strain name followed by the numerical order that is used for sorting genomes. It should be noted that all strains name must completely match with the genbank files name of all genomes.
+           A two-column tab-delimited text file is used to sort genomes from up to down according to users' requirements. Each row must consist of a strain name followed by the numerical order that is used for sorting genomes. It should be noted that all strain names must completely match the input file names of all genomes.
        -Ts, --test
            Run pneumo-typer using Test_data as input to check whether Pneumo-Typer is installed successfully (Default: F).
        -V, --version
