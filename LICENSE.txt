@@ -1,0 +1,2 @@
+Pneumo-Typer is written in Perl and released under GPLv3. The source code is freely available at https://github.com/Xiangyang1984/Pneumo-Typer and https://www.microbialgenomic.cn/Pneumo-Typer.html.
+Pneumo-Typer can also be installed through conda: ‘conda install -c bioconda pneumo-typer’.
