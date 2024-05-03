@@ -1,7 +1,7 @@
 Pneumo-Typer
 ===
 
-Pneumo-Typer is a comprehensive prediction and visualization of serotype and sequence type for streptococcus pneumoniae using assembled genomes. It is freely available at https://www.microbialgenomic.cn/Pneumo-Typer.html and https://github.com/Xiangyang1984/Pneumo-Typer under an open-source GPLv3 license.
+Pneumo-Typer is a comprehensive prediction and visualization of serotype and sequence type for streptococcus pneumoniae using assembled genomes. It is freely available at https://github.com/Xiangyang1984/Pneumo-Typer under an open-source GPLv3 license.
 
 
 * [Installation](#installation)
