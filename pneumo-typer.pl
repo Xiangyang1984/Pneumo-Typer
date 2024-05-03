@@ -7,7 +7,6 @@ use FindBin;
 use lib "$FindBin::Bin/lib";
 use Getopt::Long;
 use File::Spec;
-use PTyper;
 #use vars qw(%options);
 my $usage = <<USAGE; 
 
