@@ -231,6 +231,6 @@ Here, we provided a srf file named ["18_genome_order.txt"](https://www.microbial
 
 ## COPYRIGHT
 
-Dr. Xiangyang Li (E-mail: lixiangyang\@fudan.edu.cn, lixiangyang1984\@gmail.com), Kaili University; Bacterial Genome Data mining & Bioinformatic Analysis (http://www.microbialgenomic.cn/).
+Dr. Xiangyang Li (E-mail: lixiangyang\@fudan.edu.cn, lixiangyang1984\@gmail.com), Kaili University; Bacterial Genome Data mining & Bioinformatic Analysis.
 
 Copyright 2023, Xiangyang Li. All Rights Reserved.
