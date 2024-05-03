@@ -9,7 +9,7 @@ wcwK	07B, 07C, '40'	#snps
 ###09A_09L_09N_09V###
 wcjE	09V: normal, 09A: pseudo#deletionG722	#frameshift mutation using this wcjE-SPC09V to discriminating 09V and 09A
 wcjA	09L, 09N	#snps not use
-wcjB	09L, 09N	#snps not use
+#wcjB	09L, 09N	#snps not use
 
 ###10A_10B###
 wcrC	10A, 10B	#wrcC was different in all four serotype (10A,10B,10C and 10F), but this gene was only used for discriminating 10A and 10B
@@ -45,8 +45,9 @@ wcyV	25A: 0, 25F: 0, 38: 1	#presence used to obtain 38
 ###28A_28F###
 wciU	28A, 28F	#snps
 
-###33A_33F###
-wcjE	33A: normal, 33F: pseudo#inserionT433	#frameshift mutation if not contain wcjE-SPC33A, 33A and 33F
+###33A_33F_33B_33D###
+wciB	33F: 1, 33B: 0	#presence used to obtain 33F
+wcjE	33A: 1, 33F: 0	#absence pseudo#inserionT433 in 33F that causing frameshift mutation. /** When predict serotype is 33F, wcjE gene is the key choice for determinate serotype **/
 wciN-SPC33B	33B, 33D	#presence wciN-SPC33B used to discriminating 33B and 33D
 
 ###35A_35C_42###

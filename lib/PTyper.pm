@@ -353,7 +353,7 @@ sub genenucleotide_TFT_extract {
 # bacth annnotate genome using prodigal
 #########################################
 sub prodigal_bacth {
-    my ($input_dir, $gene_dir, $tft_dir, $thread_number, $prodigal_annotation) = @_;
+    my ($input_dir, $protein_dir, $gene_dir, $tft_dir, $thread_number, $prodigal_annotation) = @_;
     opendir (DIR_SEQ, $input_dir) or die "could not open $input_dir";
     my @input_dir = readdir DIR_SEQ; 
     @input_dir = grep ($_!~/^\./ ,@input_dir);
@@ -361,10 +361,12 @@ sub prodigal_bacth {
 
 
     my @input;
+    my @outprotein;
     my @outgene;
     my @outtft;
     foreach(sort @input_dir){
         push @input, "$input_dir/$_";
+        push @outprotein, "$protein_dir/$_";
         push @outgene, "$gene_dir/$_";    
         push @outtft, "$tft_dir/$_";    
     }
@@ -382,13 +384,14 @@ sub prodigal_bacth {
         my $progress_record = int (($job_number/$sub_file_number)*100);
         $job_number++;    
         my $input_file = $input[$job_number-1];
+        my $output_protein = $outprotein[$job_number-1];
         my $output_gene = $outgene[$job_number-1];
         my $output_tft = $outtft[$job_number-1];
 
         my $genome_annotation_percent = int (($job_number/$sub_file_number)*100); 
         print "$genome_annotation_percent%","..." if ($job_number == 1 or ( ($genome_annotation_percent%10 ==0) && ($progress_record <$genome_annotation_percent)) );
 
-        $threads[$job_number-1]=threads->new(\&prodigal_tool, $input_file, $output_gene, $output_tft, $prodigal_annotation); 
+        $threads[$job_number-1]=threads->new(\&prodigal_tool, $input_file, $output_protein, $output_gene, $output_tft, $prodigal_annotation); 
         last if ($job_number eq $sub_file_number);  
         }
 
@@ -413,12 +416,14 @@ sub prodigal_bacth {
 # gene and gff file obtain using prodigal tool
 #########################################
 sub prodigal_tool {
-    my ($input, $outgene, $outtft, $prodigal_annotation) =@_;
+    my ($input, $outprotein, $outgene, $outtft, $prodigal_annotation) =@_;
+    $outprotein =~ s/.fasta$// if $prodigal_annotation eq "F";
     $outgene =~ s/.fasta$// if $prodigal_annotation eq "F";
     $outtft =~ s/.tbl$//;
     my $prodigal = `which prodigal`;  # "/usr/bin/blastp";
     $prodigal =~ s/\n//g; 
-    system ("$prodigal -i $input -f gbk -g 11 -q -p meta -d $outgene -o $outtft");
+    system ("$prodigal -i $input -f gbk -g 11 -q -p meta -a $outprotein -d $outgene -o $outtft");
+    &gene_file($outprotein);
     &gene_file($outgene);
     &tbl_file($outtft);
 }
@@ -1151,27 +1156,41 @@ sub split_to_subfiles{
 #########################################################
 sub blast_filter {  #blastn 2023-01-10 xiangyang li edited
 
-    my ($infile, $e_value, $identify, $coverage, $match_length) = @_;
+    my ($infile, $e_value, $identify, $coverage, $match_length, $all_vs_all_cluster, $temp_s) = @_;
     open (INFILE, $infile);
-    my $all_vs_all_cluster = dirname ($infile)."/all_vs_all.cluster";
-    my $output_title = "Qseqid\tSseqid\tBitscore\tE-value\tPidenty\tQ_coverage\tS_coverage\tMacth_length";
+    open (TEMP_S, ">$temp_s") if defined $temp_s;
+    #my $output_title = "Qseqid\tSseqid\tBitscore\tE-value\tPidenty\tQ_coverage\tS_coverage\tMacth_length\tQlength";
     open (OUTFILE, ">$all_vs_all_cluster");
-    print OUTFILE "$output_title\n";
+    #print OUTFILE "$output_title\n";
     my @infile;
     while(<INFILE>){
         chomp;
         $_ =~ s/ //g;
-
+        
         my @blast_result0=split '\t', $_;
-        my $qcover0 =  $blast_result0[5]/$blast_result0[3] * 100;  #added by xiangyang
+        my $qcover0 =  ($blast_result0[7]-$blast_result0[6]+1)/$blast_result0[3] * 100;  #added by xiangyang
         $qcover0 = sprintf("%.2f", $qcover0);
-        my $scover0 = $blast_result0[5]/$blast_result0[4] * 100;  #added by xiangyang
+        my $scover0 = ($blast_result0[9]-$blast_result0[8]+1)/$blast_result0[4] * 100;  #added by xiangyang
         $scover0 = sprintf("%.2f", $scover0);
-        if (($blast_result0[10] <= $e_value) && ($blast_result0[2] >= $identify) && ($qcover0 >= $coverage) && ($scover0 >= $coverage) && ($blast_result0[5] >= $match_length)){ 
-            push @infile, $_;
+        if (($blast_result0[10] <= $e_value) && ($blast_result0[2] >= $identify) && ($blast_result0[5] >= $match_length)){ 
+            if ($qcover0 >= $coverage){
+                if ($scover0 >= $coverage){
+                    push @infile, $_;
+                }
+                else{
+                    if ( (defined $temp_s) && ($scover0 >= 50) ){ 
+                        #store subject gene id when the length of query gene is smaller than that of subject gene
+                        print TEMP_S "$blast_result0[1]\t$blast_result0[0]\t$blast_result0[2]\t$blast_result0[4]\t$blast_result0[3]\t$blast_result0[5]\t$blast_result0[8]\t$blast_result0[9]\t$blast_result0[6]\t$blast_result0[7]\t$blast_result0[10]\t$blast_result0[11]\n";
+                    } 
+                }
+            }
+            else{
+                push @infile, $_ if $scover0 == 100.00;
+            }
         }
     }
     close INFILE;
+    close TEMP_S if defined $temp_s;
     my $add_row = "Addition_row	Addition_row	100	1000	1100	1000	1	1000	1	1100	0.0	 0";
     push @infile, $add_row;
     my $row=0;
@@ -1190,8 +1209,6 @@ sub blast_filter {  #blastn 2023-01-10 xiangyang li edited
         my $scover_k = ($blast_result_k[9] - $blast_result_k[8] +1)/$blast_result_k[4] * 100;  #added by xiangyang
         $scover_k = sprintf("%.2f", $scover_k);
  
-            #set cut-off of e-value, identity, coverage, match_length for homologous protein
-            #if ($blast_result[5]>0) {$blast_result[11] = $blast_result[11]/$blast_result[5];} else {$blast_result[11] = $blast_result[11];}
         my $iden_blast_result = $blast_result[2];
         $iden_blast_result = sprintf("%.2f", $iden_blast_result);
         my $iden_blast_result_k = $blast_result_k[2];
@@ -1199,24 +1216,24 @@ sub blast_filter {  #blastn 2023-01-10 xiangyang li edited
 
             if ($blast_result[0] eq $blast_result_k[0]) {
                 if ($blast_result[11] <= $blast_result_k[11]) {
-                    if ($blast_result[3] == $blast_result[4]){
-                        $st_hash{$blast_result[0]} = "$blast_result[0]\t$blast_result[1]\t$blast_result[11]\t$blast_result[10]\t$iden_blast_result\t$qcover\t$scover\t$blast_result[5]\n";
+                    if ( ($blast_result[3] == $blast_result[4]) or ($blast_result[3]*3 == $blast_result[4]) ){
+                        $st_hash{$blast_result[0]} = "$blast_result[0]\t$blast_result[1]\t$blast_result[11]\t$blast_result[10]\t$iden_blast_result\t$qcover\t$scover\t$blast_result[5]\t$blast_result[3]\n";
                         $i = $i+1;
 
                     }else{
-                        $st_hash{$blast_result_k[0]} = "$blast_result_k[0]\t$blast_result_k[1]\t$blast_result_k[11]\t$blast_result_k[10]\t$iden_blast_result_k\t$qcover_k\t$scover_k\t$blast_result_k[5]\n";
+                        $st_hash{$blast_result_k[0]} = "$blast_result_k[0]\t$blast_result_k[1]\t$blast_result_k[11]\t$blast_result_k[10]\t$iden_blast_result_k\t$qcover_k\t$scover_k\t$blast_result_k[5]\t$blast_result_k[3]\n";
                         $i = $i+1;
 
                     }
                     
                 }else{
-                    $st_hash{$blast_result[0]} = "$blast_result[0]\t$blast_result[1]\t$blast_result[11]\t$blast_result[10]\t$iden_blast_result\t$qcover\t$scover\t$blast_result[5]\n";
+                    $st_hash{$blast_result[0]} = "$blast_result[0]\t$blast_result[1]\t$blast_result[11]\t$blast_result[10]\t$iden_blast_result\t$qcover\t$scover\t$blast_result[5]\t$blast_result[3]\n";
 
                     $i = $i+1;
                 }
 
             }else{               
-                $st_hash{$blast_result[0]} = "$blast_result[0]\t$blast_result[1]\t$blast_result[11]\t$blast_result[10]\t$iden_blast_result\t$qcover\t$scover\t$blast_result[5]\n";    
+                $st_hash{$blast_result[0]} = "$blast_result[0]\t$blast_result[1]\t$blast_result[11]\t$blast_result[10]\t$iden_blast_result\t$qcover\t$scover\t$blast_result[5]\t$blast_result[3]\n";    
             }
 
 
@@ -1228,7 +1245,12 @@ sub blast_filter {  #blastn 2023-01-10 xiangyang li edited
     }
     close OUTFILE;
 
-    return $all_vs_all_cluster;
+    system("rm -rf $all_vs_all_cluster") if scalar keys %st_hash == 0;
+    return $all_vs_all_cluster if scalar keys %st_hash > 0;
+
+    return $temp_s if defined $temp_s;
+    #return $all_vs_all_cluster;
+    #return $temp_s if defined $temp_s;
 
 }
 
@@ -1439,7 +1461,7 @@ sub batch_genomenucleotide_extract_run {
 ###### do bacth work
 ##################################################################################################
 sub batch_genenucleotide_TFT_extract_run {
-    my ($path_genbank, $path_TFT, $path_gene, $thread_number, $prodigal_annotation, $path_fa)=@_;
+    my ($path_genbank, $path_TFT, $path_protein, $path_gene, $thread_number, $prodigal_annotation, $path_fa)=@_;
 
     opendir PATH_GENBANK, $path_genbank or die "could not open $path_genbank";
     my @path_genbank = readdir PATH_GENBANK;
@@ -1454,9 +1476,10 @@ sub batch_genenucleotide_TFT_extract_run {
  
     foreach my $file_genbank(@path_genbank){ 
         $file_genbank =~ s/ /_/g;
-        my $input = "$path_genbank/$file_genbank";  
+        my $input = "$path_genbank/$file_genbank";
+        my $output_1 = "$path_protein/$file_genbank.fasta";  
         my $output_2 = "$path_TFT/$file_genbank.tbl";
-        my $output_3="$path_gene/$file_genbank.fasta";
+        my $output_3 = "$path_gene/$file_genbank.fasta";
         my $progress_record = int (($job_number/$sub_file_number)*100);
         $job_number++;
         my $Genenucleotide_TFT_extract_progress = int (($job_number/$sub_file_number)*100); 
@@ -1464,6 +1487,7 @@ sub batch_genenucleotide_TFT_extract_run {
         $runner->run(
 	    sub{
                 my $file_name = basename($input);
+                open(OUTPUT_1, ">$output_1");
                 open(OUTPUT_2, ">$output_2");
                 open(OUTPUT_3, ">$output_3");
 
@@ -1569,6 +1593,12 @@ sub batch_genenucleotide_TFT_extract_run {
                                         print OUTPUT_2 "$start\t$stop\t$primary\t$locus_tag\t$product\t$acc\n";
                                     }
                                 }
+
+                                my $protein_seqeunce;
+                                if ( $feat->has_tag('translation')) {
+                                    ($protein_seqeunce) = $feat->get_tag_values('translation');                     
+                                    print OUTPUT_1 ">$locus_tag#$product;$file_name\n$protein_seqeunce\n";                        
+                                }
  
                                 my $dna;
                                 if ( $feat->spliced_seq->seq ) {
@@ -1583,7 +1613,7 @@ sub batch_genenucleotide_TFT_extract_run {
                 my @feature = stat ($output_3);
                 my $size = $feature[7];
                 my $sec_input = "$path_fa/$file_name";
-                &prodigal_tool($sec_input, $output_3, $output_2, $prodigal_annotation) if $size == 0;
+                &prodigal_tool($sec_input, $output_1, $output_3, $output_2, $prodigal_annotation) if $size == 0;
  
             }
 
@@ -1600,7 +1630,7 @@ sub batch_genenucleotide_TFT_extract_run {
 # bacth annnotate genome using prodigal
 #########################################
 sub prodigal_bacth_run {
-    my ($input_dir, $gene_dir, $tft_dir, $thread_number, $prodigal_annotation) = @_;
+    my ($input_dir, $protein_dir, $gene_dir, $tft_dir, $thread_number, $prodigal_annotation) = @_;
     my $prodigal = `which prodigal`;
     $prodigal =~ s/\n//g;
 
@@ -1618,6 +1648,7 @@ sub prodigal_bacth_run {
 
     foreach(sort @input_dir){
         my $input = "$input_dir/$_";
+        my $outprotein = "$protein_dir/$_";
         my $outgene = "$gene_dir/$_";    
         my $outtft = "$tft_dir/$_"; 
         my $progress_record = int (($job_number/$sub_file_number)*100);
@@ -1628,7 +1659,8 @@ sub prodigal_bacth_run {
 	    sub{
                 $outgene =~ s/.fasta$// if $prodigal_annotation eq "F";
                 $outtft =~ s/.tbl$//; 
-                system ("$prodigal -i $input -f gbk -g 11 -q -p meta -d $outgene -o $outtft");
+                system ("$prodigal -i $input -f gbk -g 11 -q -p meta -a $outprotein -d $outgene -o $outtft");
+                &gene_file($outprotein);
                 &gene_file($outgene);
                 &tbl_file($outtft);
             }
@@ -1644,12 +1676,35 @@ sub prodigal_bacth_run {
 #########################################################
 sub bacth_blast_best_run {
 
-    my ($workplace, $path_gene, $blastn_out_dir, $db_file, $evalue, $blastn, $makeblastdb, $thread_number) = @_;
+    my ($workplace, $path_protein, $blastp_out_dir, $path_gene, $blastn_out_dir, $db_file, $mmseqs, $blastn, $makeblastdb, $thread_number, $homologous_gene_cutoff) = @_;
+    my $blat        = `which blat`;  
+    $blat =~ s/\n//g;
+
+    my ($evalue, $identify, $coverage, $match_length) = split /,/, $homologous_gene_cutoff;
+    #my $bestp_output = "$workplace/BESTp.BLASTOUT";
+    #my $all_vs_all_clusterp = "$workplace/all_vs_all.clusterp";
+    #my $best_output = "$workplace/BEST.BLASTOUT";
+    #my $all_vs_all_cluster = "$workplace/all_vs_all.cluster";
+    my $temp_dir = "$workplace/temp_dir";
+    mkdir $temp_dir;
 
     use File::Basename qw<basename dirname>;
     my $db = $workplace."/".basename($db_file);
     system ("cp $db_file $db");
     system ("$makeblastdb -in $db -dbtype nucl > $workplace/temp.txt");
+
+    #MMseqs database format
+    my $targetDB = $workplace."/targetDB";
+    my $tmp = "$workplace/tmp";
+    if ($mmseqs =~/mmseqs/){       
+        system("$mmseqs createdb $db $targetDB -v 0"); 
+        system("$mmseqs createindex $targetDB tmp --search-type 4 -v 0");
+    }
+
+    opendir (PROTEIN_FOLDER, $path_protein);
+    my @path_protein = readdir PROTEIN_FOLDER;
+    @path_protein = grep ($_!~/^\./, @path_protein);
+    closedir PROTEIN_FOLDER;
 
     opendir (GENE_FOLDER, $path_gene);
     my @path_gene = readdir GENE_FOLDER;
@@ -1663,18 +1718,66 @@ sub bacth_blast_best_run {
     my $runner = Para::Runner->new($thread_number);
 
     foreach my $eachfile (@path_gene) {
+
+        my $inputp = "$path_protein/$eachfile";  
+        my $outfilep = "$blastp_out_dir/$eachfile.blastout";
+        my $parsedoutp = "$blastp_out_dir/$eachfile.parsedoutp";
+
         my $input = "$path_gene/$eachfile";  
         my $outfile = "$blastn_out_dir/$eachfile.blastout";
+        my $parsedoutn = "$blastn_out_dir/$eachfile.parsedoutn";
+        my $parsedout = "$blastn_out_dir/$eachfile.parsedout";
+
+        my $temp_file = "$temp_dir/$eachfile.temp";
+        my $blat_out = "$temp_dir/$eachfile.blatout";
+        my $blat_query = "$workplace/Whole_fasta1/$eachfile";
+        $blat_query =~ s/.fasta$//;
+        my $eachtft = "$workplace/Whole_TFT/$eachfile";
+        $eachtft =~ s/.fasta$/.tbl/;
         my $progress_record = int (($job_number/$sub_file_number)*100);
         $job_number++;
         my $Blastn_percent = int (($job_number/$sub_file_number)*100); 
         print "$Blastn_percent%","..." if ($job_number == 1 or ( ($Blastn_percent%10 ==0) && ($progress_record <$Blastn_percent)) );
         $runner->run(
             sub{
-                #****** Warining: this subrouine is only used to find the best hit for each query gene against database, and a loose cutoff for evalue
+                #[main] do blastn against $db
                 my $cmd = "$blastn -outfmt '6 qseqid sseqid pident qlen slen length qstart qend sstart send evalue bitscore' -max_target_seqs 2 -evalue $evalue -num_threads 1 -query $input -db $db -out $outfile";
                 system("$cmd 2>/dev/null"); #not print warning on terminal
-               }
+
+                # parse BlastnOut, meantime store subject gene id when the length of query gene is smaller than that of subject gene
+                &blast_filter ($outfile, $evalue, $identify, $coverage, $match_length, $parsedoutn, $temp_file); #20240323
+                
+                if ( (-e $parsedoutn) && ((stat ($parsedoutn))[7] > 0) ){
+                    # extract the protein sequences ($parsedoutn.sub.fasta) from blastn results ($parsedoutn)
+                    &extract_sequence($inputp, $parsedoutn); 
+
+                    #[main] do tblastn against $db
+                    my $cmdp;
+                    $cmdp = "$mmseqs -outfmt '6 qseqid sseqid pident qlen slen length qstart qend sstart send evalue bitscore qframe sframe' -max_target_seqs 2 -evalue $evalue -num_threads 1 -query $parsedoutn.sub.fasta -db $db -out $outfilep -db_gencode 11 -seg 'no'" if $mmseqs =~ /tblastn/; #using tblastn
+                    $cmdp = "$mmseqs easy-search $parsedoutn.sub.fasta $targetDB $outfilep $tmp --min-aln-len 30 --threads 4 --max-seqs 2 --format-output query,target,pident,qlen,tlen,alnlen,qstart,qend,tstart,tend,evalue,bits --translation-table 11 -v 0" if $mmseqs =~ /mmseqs/; # --cov-mode 0 -c 0.95  --min-seq-id 0.7 
+                    system("$cmdp  2>/dev/null") ; #not print warning on terminal
+
+                    # parse BlastnOutp
+                    &blast_filter ($outfilep, $evalue, $identify, $coverage, $match_length, $parsedoutp);
+                
+                    #[main] obtain $parsedout based on $parsedoutn and $parsedoutp             
+                    &subtract_id ($parsedoutn, $parsedoutp, $parsedout);  
+                    
+                    ######sepcial case that query genes that satisfy identity ≥70% but not 50%≤ coverage ≤95% ($temp_file)
+                    if ( (-e $temp_file) && ((stat ($temp_file))[7] > 0) ){  
+                    
+                        #in case, extract the protein sequences ($temp_file.sub.fasta) from parsed blastn results in case that query genes that satisfy identity ≥70% but not 50%≤ coverage ≤95% ($temp_file)
+                        &extract_sequence($db, $temp_file);  
+                                
+                        system ("$blat $blat_query $temp_file.sub.fasta $blat_out -out=pslx -fastMap -noHead > $temp_dir/temp.txt");
+                    
+                        &blat_copy($db, $blat_query, $temp_dir, $temp_file, $makeblastdb, $mmseqs, $blat_out, $evalue, $identify, $coverage, $match_length, $eachfile, $eachtft, $parsedout) if ((stat ($blat_out))[7] > 0);                       
+                    }
+                    
+                ###### end for process
+                }
+
+            }
         )#run end
     }
     $runner->finish;
@@ -1682,6 +1785,382 @@ sub bacth_blast_best_run {
 
 }
 
+sub blastn_small {
+    my ($qy, $sj, $qsout, $makeblastdb, $mmseqs, $evalue) = @_;
+    #system ("$makeblastdb -in $sj -dbtype nucl > $temp_dir/temp.txt");
+    my $cmdp = "$mmseqs -outfmt '6 qseqid sseqid pident qlen slen length qstart qend sstart send evalue bitscore qframe sframe' -max_target_seqs 2 -evalue $evalue -num_threads 1 -query $qy -db $sj -out $qsout -db_gencode 11 -seg 'no'"; #using tblastn
+#print "$cmdp\n";
+    system("$cmdp 2>/dev/null"); #not print warning on terminal
+
+}
+
+sub blat_copy {  
+
+    my ($db, $blat_query, $temp_dir, $temp_file, $makeblastdb, $tblastn, $outputfinal, $evalue, $identify, $coverage, $match_length, $eachfile, $eachtft, $parsedout) = @_;
+
+    my $passif = "$temp_dir/$eachfile.passif.fasta";
+    my $passif_blastout = "$temp_dir/$eachfile.passif_blastout";
+    my $passif_blastoutn = "$temp_dir/$eachfile.passif_blastoutn";
+
+    my %record_pos;
+    my %record_tft;
+    my %record_gid;
+    my %record_check;    
+    open (OT, $outputfinal);
+    while (<OT>){
+    #201     0       0       0       0       0       0       0       +       GCA_901328695.1_318#XXX;GCA_901328695.1|SPC08_0017      201     0       201     CABBRA010000001 790733  304957  305158  1       201,    0,      304957, agcgtctatatcctccattccccaatttgtagtatgattctaattctgatgttgaaagtgggaattagctctactttacttcatattgttatcggaattgttttgggctggcatttatccatcctagcaacctatatattgaaaaaaattccatttttgaatattgttttattaccacagaagtatattaaattaaaataa,      agcgtctatatcctccattccccaatttgtagtatgattctaattctgatgttgaaagtgggaattagctctactttacttcatattgttatcggaattgttttgggctggcatttatccatcctagcaacctatatattgaaaaaaattccatttttgaatattgttttattaccacagaagtatattaaattaaaataa,
+        chomp;
+        next unless $_ =~ /^\d/;
+        $_ =~ s/ //g;
+        my @array = split /\t/, $_;
+        #my $sum = $array[1]+$array[2]+$array[3]+$array[4]+$array[5]+$array[6]+$array[7];
+                
+        if ($array[0]/$array[10]*100>=$coverage){
+            my $new_id = $array[9];
+            my $start_pos = $array[15] + 1;
+            my $end_pos = $array[16];
+            my $frame = $array[8];
+            push @{$record_pos{$array[13]}}, "$new_id $start_pos $end_pos $frame";
+            my $glen = abs($end_pos - $start_pos) + 1;
+             
+            $new_id =~ s/\|.*//g;
+            my ($gene_id, $annotation, $genome_name) = split /[;#]/, $new_id;
+            #print "$gene_id\t$annotation\t$genome_name\n";
+            
+            if ($frame eq "+"){
+                $record_tft{$array[16]."|".$array[13]} = "$start_pos\t$array[16]\tCDS\t$gene_id\t$annotation\t$array[13]";
+                $record_gid{$array[16]."|".$array[13]} = $gene_id;
+                $record_check{$array[9]."|".$glen} = $array[16]."|".$array[13];
+            }else{
+                $record_tft{$start_pos."|".$array[13]} = "$array[16]\t$start_pos\tCDS\t$gene_id\t$annotation\t$array[13]";
+                $record_gid{$start_pos."|".$array[13]} = $gene_id;
+                $record_check{$array[9]."|".$glen} = $start_pos."|".$array[13];
+            }
+
+        }
+    }
+    close OT;
+    #Re-obtaining the full length of predicted gene based on blat analysis, because some genes called via prodigal may lead to shorten in length
+    &extract_seq_to_position($blat_query, "$passif.nucl", \%record_pos);
+    
+    #translate to protein sequence, check whether gene can be nornally translated
+    &cds2pro("$passif.nucl", $passif, "$passif.bad_record") if ( (-e "$passif.nucl") && ((stat ("$passif.nucl"))[7] > 0) ); #20240323 
+    
+    #do tblastn against $db
+    &blastn_small($passif, $db, $passif_blastout, $makeblastdb, $tblastn, $evalue) if ( (-e $passif) && ((stat ($passif))[7] > 0) ); #20240323 
+    &blast_filter($passif_blastout, $evalue, $identify, $coverage, $match_length, $passif_blastoutn) if -e $passif_blastout;
+    &modity_seqID_tft($passif_blastoutn, $eachtft, \%record_tft, \%record_gid, \%record_check, $parsedout) if ( (-e $passif_blastoutn) && ((stat ($passif_blastoutn))[7] > 0) );
+}
+
+sub modity_seqID_tft {
+    my ($hit, $eachtft, $ref_hash1, $ref_hash2, $ref_hash3, $parsedout) = @_;
+    my %record_tft = %$ref_hash1;
+    my %record_gid = %$ref_hash2;
+    my %record_check = %$ref_hash3;
+    my %tbl;
+    open (ETFT, $eachtft);
+    while(<ETFT>){ 
+    #3860    2583    CDS     GCA_909594865.1_3       XXX     CAJSTG010000001
+        chomp;
+        next unless $_ !~ /^>Contig/;
+        my @tbl = split /\t/, $_;
+        $tbl{$tbl[1]."|".$tbl[5]} = $tbl[3]; #keys: gene_stop_position."|".contig (e.g 8253|CAALZB010000020); values: geneid (e.g GCA_901222125.1_1987)
+    }
+    close ETFT;
+
+    open (HIT, $hit);
+    my %add_gene_row; #store the passed gene information for each genome
+    while(<HIT>){
+    #GCA_000495335.1_498#XXX;GCA_000495335.1|SPC06C_10       SPC06A_0014     886     0.0     100.00  100.00  96.82   456     456
+        chomp;
+        next unless $_ !~ /^Qseqid	Sseqid/;
+        my @q = split /\t/, $_;
+        my $lq = $q[8]*3;
+        my $key_check = $record_check{$q[0]."|".$lq}; #obtain gene_stop_position."|".contig
+       
+        #when the query's geneid is the same both in the original tft file and in parsed blatout file, correct the start positon in the original tft file 
+        if ( $key_check && (defined $record_gid{$key_check}) && (defined $tbl{$key_check}) && ($record_gid{$key_check} eq $tbl{$key_check}) ){
+            system("sed -i 's/.*\t\Q$record_gid{$key_check}\E\t.*/\Q$record_tft{$key_check}\E/' $eachtft"); #revise tbl file in Whole_TFT folder to correct the gene call drawback by prodigal when geneid is identity in $passif_blastoutn and $eachtft
+            my $qnew = $q[0];
+            $qnew =~ s/\|.*//g;
+            my $snew = $q[1];
+            $snew =~ s/.*\|//g;
+            my $lmatch = $q[7]*3;
+            $add_gene_row{$qnew} = "$qnew\t$snew\t$q[2]\t$q[3]\t$q[4]\t$q[5]\t$q[6]\t$lmatch\t$lq\tremedy_by_blat_tblastn\n";            
+             
+        }
+    }
+    close HIT;
+
+    #add the passed gene information into cps gene for each genome
+    open (ADD, ">>$parsedout");
+    foreach (keys %add_gene_row){
+        print ADD $add_gene_row{$_}; 
+    }
+    close ADD;
+
+    system("sed -i 's/\|.*\|/\t/g' $hit");    
+}
+
+
+
+sub extract_seq_to_position {
+    my ($in_file, $out_file, $ref) = @_;
+    my %a = %$ref;
+    my @c = keys %a;
+
+    use Bio::SeqIO;
+    my $in = Bio::SeqIO->new ( -file => $in_file, -format => 'fasta');
+    open (OUT, ">$out_file");
+    while (my $seq = $in->next_seq() ) {             
+        if (grep ($_ eq $seq->id, @c)){ 
+            foreach (@{$a{$seq->id}}){               
+                my ($id, $start_pos, $end_pos, $frame) = split / /, $_;
+                print OUT ">$id\n", $seq->trunc($start_pos, $end_pos)->seq, "\n" if $frame eq "+";
+                print OUT ">$id\n", &reverse_complement($seq->trunc($start_pos, $end_pos)->seq), "\n" if $frame eq "-";
+            }
+        }
+    }
+    close OUT;
+}
+
+
+sub reverse_complement {   
+    my $infile = shift;
+    use Bio::Seq;
+    my $seqobj = Bio::Seq->new(-seq => $infile);
+    my $Query = $seqobj->revcom()->seq;
+    return $Query;
+}
+
+
+sub cds2pro {
+    my ($cds, $pro, $bad_record) = @_;
+    my %record_stop_codon;
+    my $index=0;
+    my %DNAfilename = parse_fasta($cds);
+    open (OUT, ">$pro");
+    open (DR, ">$bad_record");
+    foreach my $key (keys %DNAfilename){
+        $index++;
+        my $record_key = $key."||".$index;
+        my $DNA = $DNAfilename{$key};
+        chomp $DNA;
+        $DNA =~ s/\s//g;
+        my $protein='';
+        my $codon;
+        for(my $i=0;$i<(length($DNA)-2);$i+=3){
+            $codon=substr($DNA,$i,3);
+            $protein.=&codon2aa($codon) if codon2aa($codon);
+            push @{$record_stop_codon{$record_key}}, $i if (codon2aa($codon)) && (codon2aa($codon) eq "*");
+            #print "$record_key\t$i\n" if codon2aa($codon) eq "*";
+        }
+        if (defined $record_stop_codon{$record_key}){
+            my $stop_codon_num = scalar @{$record_stop_codon{$record_key}};
+            my $stop_codon_pos = join ("|", @{$record_stop_codon{$record_key}});
+            my $len_check = abs(length($DNA)/3-int(length($DNA)/3));
+            my $glen = length($DNA);
+            if ( ($stop_codon_num eq 1) && ($len_check eq 0) ){
+                print OUT ">$key\n$protein\n";
+            }else{
+                print DR ">$key length: $glen stop_codon_number: $stop_codon_num stop_codon_position: $stop_codon_pos\n$protein\n";
+            }
+        }
+    }
+    close OUT;
+    close DR;
+    
+    #return %record_stop_codon;
+}
+
+
+
+sub codon2aa{
+    my($codon)=@_;
+    $codon=uc $codon;
+    my(%g)=(
+               'AAA' => 'K', # Lysine
+               'AAC' => 'N', # Asparagine
+               'AAG' => 'K', # Lysine
+               'AAT' => 'N', # Asparagine
+               'ACA' => 'T', # Threonine
+               'ACC' => 'T', # Threonine
+               'ACG' => 'T', # Threonine
+               'ACT' => 'T', # Threonine
+               'AGA' => 'R', # Arginine
+               'AGC' => 'S', # Serine
+               'AGG' => 'R', # Arginine
+               'AGT' => 'S', # Serine
+               'ATA' => 'I', # Isoleucine
+               'ATC' => 'I', # Isoleucine
+               'ATG' => 'M', # Methionine
+               'ATT' => 'I', # Isoleucine
+               'CAA' => 'Q', # Glutamine
+               'CAC' => 'H', # Histidine
+               'CAG' => 'Q', # Glutamine
+               'CAT' => 'H', # Histidine
+               'CCA' => 'P', # Proline
+               'CCC' => 'P', # Proline
+               'CCG' => 'P', # Proline
+               'CCT' => 'P', # Proline
+               'CGA' => 'R', # Arginine
+               'CGC' => 'R', # Arginine
+               'CGG' => 'R', # Arginine
+               'CGT' => 'R', # Arginine
+               'CTA' => 'L', # Leucine
+               'CTC' => 'L', # Leucine
+               'CTG' => 'L', # Leucine
+               'CTT' => 'L', # Leucine
+               'GAA' => 'E', # Glutamic Acid
+               'GAC' => 'D', # Aspartic Acid
+               'GAG' => 'E', # Glutamic Acid
+               'GAT' => 'D', # Aspartic Acid
+               'GCA' => 'A', # Alanine
+               'GCC' => 'A', # Alanine
+               'GCG' => 'A', # Alanine
+               'GCT' => 'A', # Alanine
+               'GGA' => 'G', # Glycine
+               'GGC' => 'G', # Glycine
+               'GGG' => 'G', # Glycine
+               'GGT' => 'G', # Glycine
+               'GTA' => 'V', # Valine
+               'GTC' => 'V', # Valine
+               'GTG' => 'V', # Valine
+               'GTT' => 'V', # Valine
+               'TAA' => '*', # Stop
+               'TAC' => 'Y', # Tyrosine
+               'TAG' => '*', # Stop
+               'TAT' => 'Y', # Tyrosine
+               'TCA' => 'S', # Serine
+               'TCC' => 'S', # Serine
+               'TCG' => 'S', # Serine
+               'TCT' => 'S', # Serine
+               'TGA' => '*', # Stop
+               'TGC' => 'C', # Cysteine
+               'TGG' => 'W', # Tryptophan
+               'TGT' => 'C', # Cysteine
+               'TTA' => 'L', # Leucine
+               'TTC' => 'F', # Phenylalanine
+               'TTG' => 'L', # Leucine
+               'TTT' => 'F', # Phenylalanine
+               'aaa' => 'K', 'caa' => 'Q', 'gaa' => 'E', 'taa' => '*',
+               'aac' => 'N', 'cac' => 'H', 'gac' => 'D', 'tac' => 'Y',
+               'aag' => 'K', 'cag' => 'Q', 'gag' => 'E', 'tag' => '*',
+               'aat' => 'N', 'cat' => 'H', 'gat' => 'D', 'tat' => 'Y',
+               'aca' => 'T', 'cca' => 'P', 'gca' => 'A', 'tca' => 'S',
+               'acc' => 'T', 'ccc' => 'P', 'gcc' => 'A', 'tcc' => 'S',
+               'acg' => 'T', 'ccg' => 'P', 'gcg' => 'A', 'tcg' => 'S',
+               'act' => 'T', 'cct' => 'P', 'gct' => 'A', 'tct' => 'S',
+               'aga' => 'R', 'cga' => 'R', 'gga' => 'G', 'tga' => '*', 
+               'agc' => 'S', 'cgc' => 'R', 'ggc' => 'G', 'tgc' => 'C',
+               'agg' => 'R', 'cgg' => 'R', 'ggg' => 'G', 'tgg' => 'W',
+               'agt' => 'S', 'cgt' => 'R', 'ggt' => 'G', 'tgt' => 'C',
+               'ata' => 'I', 'cta' => 'L', 'gta' => 'V', 'tta' => 'L',
+               'atc' => 'I', 'ctc' => 'L', 'gtc' => 'V', 'ttc' => 'F',
+               'atg' => 'M', 'ctg' => 'L', 'gtg' => 'V', 'ttg' => 'L',
+               'att' => 'I', 'ctt' => 'L', 'gtt' => 'V', 'ttt' => 'F'
+
+    );
+    if(exists $g{uc $codon}) {
+        return $g{uc $codon};
+    }
+    else{
+        #print STDERR "Bad codon \"$codon\"!!\n";
+        #exit;
+    }
+}
+
+
+
+sub subtract_id {
+
+    my ($nblist, $pblist, $blist) = @_;
+    
+    my %p;
+    if ( (stat ($pblist))[7] > 0 ){ # check $pblist is not the null file
+        open (P, $pblist);   
+        while(<P>){
+            chomp;
+            $_ =~ s/\t.*//g;
+            $p{$_} = $_;
+        }
+        close P;
+    }
+
+    open (N, $nblist);
+    open (B, ">$blist");
+    while(<N>){
+        chomp;
+        my @cc = split /\t/, $_;
+        print B "$_\n" if defined $p{$cc[0]};
+        print B "$_\n" if !defined $p{$cc[0]} && $cc[6] == 100.00;
+    }
+    close N;
+    close B;
+
+}
+
+sub extract_sequence {
+    my ($protein_file, $blastout_list) = @_;
+    my %seq_hash = parse_fasta($protein_file);
+
+    open (LIST, $blastout_list) or die "can not open $blastout_list";
+    my @array = <LIST>;
+    open(OUT, ">$blastout_list.sub.fasta");
+
+    my @key =  keys %seq_hash;
+    foreach my $kk(@array){
+        chomp $kk;
+        next unless $kk !~ /^Qseqid	Sseqid/;
+        $kk =~ /(.*?)\t(.*?)\t.*/;
+        my $queryid = $2;
+        if (grep(/$1/,@key)){ 
+            my @id = grep(/$1/,@key);
+            print OUT ">$queryid|$id[0]\n$seq_hash{$id[0]}\n" if $blastout_list =~ /fasta.temp$/; # related Query gene id and subject gene id
+            print OUT ">$id[0]\n$seq_hash{$id[0]}\n" if $blastout_list !~ /fasta.temp$/;
+        }
+    }
+
+    close LIST;
+    close OUT; 
+
+}
+
+
+sub recheck_pseudogene_len{
+
+    my ($all_vs_all_cluster, $filter_pseudogene, $homologous_gene_cutoff) = @_;
+    my ($evalue, $identify, $coverage, $match_length) = split /,/, $homologous_gene_cutoff;
+    open (FPD, $filter_pseudogene);
+    my %fpd;
+    while(<FPD>){
+        chomp;
+        my @fpd = split /\t/, $_;
+        $fpd{$fpd[0]} = $fpd[1];
+    }
+    close FPD;
+
+    open (AVA, $all_vs_all_cluster);
+    
+    my @store;
+    while(<AVA>){
+        chomp;
+        #next unless $_ !~ /\t/;
+        my @ava = split /\t/, $_;
+        if ( (defined $fpd{$ava[1]}) && ($ava[8] < $fpd{$ava[1]}*$coverage/100) ){ #delete query that hit cps pseudogene whose length is <= normal_length * $coverage
+            #print "oooo: $_\t$fpd{$ava[1]}\n";
+
+        }else{
+            push @store, "$_\n";
+        }
+    }
+    close AVA;
+
+    open (AVA, ">$all_vs_all_cluster");
+    print AVA join ("", @store);   
+    close AVA;
+    
+}
 
 
 sub obtain_map_cmd {

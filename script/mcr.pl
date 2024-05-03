@@ -22,10 +22,10 @@ close CPS;
 
 open (OUT, ">$ARGV[1]");
 my $count=-1;
-foreach my $gc (keys %hash){
+foreach my $gc (sort keys %hash){
     $count++;
     my %derepeat;
-    foreach my $t (@{$taxa{$gc}}){
+    foreach my $t (sort @{$taxa{$gc}}){
         $derepeat{$t}=$t;
     }
     print OUT "homologous_gene_cluster_", $count, "(", scalar @{$hash{$gc}}, " genes,", scalar keys %derepeat, " taxa): ", join (" ", @{$hash{$gc}}), "\n";

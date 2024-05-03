@@ -7,12 +7,13 @@ use FindBin;
 use lib "$FindBin::Bin/lib";
 use Getopt::Long;
 use File::Spec;
+use PTyper;
 #use vars qw(%options);
 my $usage = <<USAGE; 
 
 =NAME
 
-pneumo-typer.pl
+Pneumo-Typer
 
 =DESCRIPTION
 
@@ -47,7 +48,7 @@ perl pneumo-typer.pl -d Test_data -t 10  -p T
        -Sb, --skip_blastn
            Skip the process of doing blastn during serotype analysis.
        -p, --prodigal_annotation
-           Annotate all genomes using prodigal. 
+           Annotate all genomes using prodigal (Default: T). 
        -m, --mlst
            Perform mlst analysis (Default: T). 
        -c, --cgmlst
@@ -83,9 +84,9 @@ my %options = (
     'workplace_directory'                          => undef,  
     'multiple_threads'                             => "3",
     'skip_sequence_processing'                     => "F",
-    'homologous_gene_cutoff'                       => "1e-5,70,95,100", #array to set blast parse cutoff: E-value, Identify, Coverage, Match_length
+    'homologous_gene_cutoff'                       => "1e-5,70,95,30", #array to set blast parse cutoff: E-value, Identify, Coverage, Match_length
     'skip_blastn'                                  => "F",
-    'prodigal_annotation'                          => "F",
+    'prodigal_annotation'                          => "T",
     'mlst'                                         => "T",
     'cgmlst'                                       => "F",
     'recreate_heatmap'                             => "F",
@@ -125,7 +126,7 @@ if ( defined( $options{help} ) ) {
 }
 
 if (defined $options{version}) {
-    print "\nVersion: Pneumo-Typer v1.0.1\n\n";
+    print "\nVersion: Pneumo-Typer v1.0.2\n\n";
     exit(1);  
 }
 
@@ -135,7 +136,11 @@ print "\n$now_time: pneumo-typer.pl start...\n\n";
 my $home_directory = $FindBin::Bin;   # obtaining the home directory where Pneumo-Typer.pl located
 ######################################################################################################
 # Set the absolute path for four programs
-my $blastn        = `which blastn`;  # "/usr/bin/blastp";
+
+my $tblastn        = `which tblastn`;  # "/usr/bin/tblastn"; mmseqs
+$tblastn =~ s/\n//g;
+
+my $blastn        = `which blastn`;  # "/usr/bin/blastn";
 $blastn =~ s/\n//g; 
 
 my $makeblastdb   = `which makeblastdb`; #"/usr/bin/makeblastdb";
@@ -178,6 +183,9 @@ mkdir $path_fa1;
 my $path_fa2 = $workplace."/Whole_fasta2"; #fasta sequences are concatenated for each genome
 mkdir $path_fa2;
 
+my $path_protein = $workplace."/Whole_protein";
+mkdir $path_protein;
+
 my $path_gene = $workplace."/Whole_gene";
 mkdir $path_gene;
 
@@ -197,9 +205,9 @@ if ( ($options{recreate_heatmap} eq "F")  && ($options{recreate_figure} eq "F") 
 
         &PTyper::batch_genomenucleotide_extract_run ($path_genbank, $path_fa1, $path_fa2, $thread_number);
 
-        &PTyper::batch_genenucleotide_TFT_extract_run ($path_genbank, $directory_TFT, $path_gene, $thread_number, $prodigal_annotation, $path_fa1) if $prodigal_annotation eq "F";
+        &PTyper::batch_genenucleotide_TFT_extract_run ($path_genbank, $directory_TFT, $path_protein, $path_gene, $thread_number, $prodigal_annotation, $path_fa1) if $prodigal_annotation eq "F";
 
-        &PTyper::prodigal_bacth_run ($path_fa1, $path_gene, $directory_TFT, $thread_number, $prodigal_annotation) if $prodigal_annotation eq "T";
+        &PTyper::prodigal_bacth_run ($path_fa1, $path_protein, $path_gene, $directory_TFT, $thread_number, $prodigal_annotation) if $prodigal_annotation eq "T";
     }
 
 
@@ -218,19 +226,25 @@ if ( ($options{recreate_heatmap} eq "F")  && ($options{recreate_figure} eq "F") 
 
  
     print "\nSTEP-3: Predicting serotype\n";
-    my ($e_value, $identify, $coverage, $match_length) = split /,/, $options{homologous_gene_cutoff};
-    my $best_output = "$workplace/BEST.BLASTOUT";
-    my $blastn_out_dir = "$workplace/blastn_out_dir";
-    mkdir $blastn_out_dir;
     
-    &PTyper::bacth_blast_best_run ($workplace, $path_gene, $blastn_out_dir, $db_file, $e_value, $blastn, $makeblastdb, $thread_number) if $options{skip_blastn} eq "F";
+    
+    my $blastp_out_dir = "$workplace/blastp_out_dir";
+    mkdir $blastp_out_dir;
+    
+    
+    my $blastn_out_dir = "$workplace/blastn_out_dir";
+    mkdir $blastn_out_dir;   
 
+    &PTyper::bacth_blast_best_run ($workplace, $path_protein, $blastp_out_dir, $path_gene, $blastn_out_dir, $db_file, $tblastn, $blastn, $makeblastdb, $thread_number, $options{homologous_gene_cutoff}) if $options{skip_blastn} eq "F";
+#sed -i 's/.*\tGCA_001131025.1_112\t.*/10\t1000\tCDS\tGCA_001131025.1_112\tCKZO01000001/g' file
     print "    Process data and obtain serotype...";
+
+    my $all_vs_all_cluster = "$workplace/all_vs_all.cluster";
     chdir $blastn_out_dir;
-    system ("find . -type f -name '*.blastout' | xargs cat > $best_output") if $options{skip_blastn} eq "F";  # For large number of files, directly using cat may causing error
+    system ("find . -type f -name '*.parsedout' | xargs cat > $all_vs_all_cluster") if $options{skip_blastn} eq "F";  # For large number of files, directly using cat may causing error
 
-    my $all_vs_all_cluster = PTyper::blast_filter ($best_output, $e_value, $identify, $coverage, $match_length);
-
+    my $filter_pseudogene = "$home_directory/DATABASE/filter_pseudogene.txt";
+    &PTyper::recheck_pseudogene_len($all_vs_all_cluster, $filter_pseudogene, $options{homologous_gene_cutoff});
 
     ############################################################
     ############################################################
