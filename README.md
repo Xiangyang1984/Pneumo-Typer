@@ -14,7 +14,7 @@ Pneumo-Typer is a comprehensive prediction and visualization of serotype and seq
 	
  * [Usage](#usage)
 	
- 	* [Update mlst and/or cgmlst dataset](#Update mlst and/or cgmlst dataset)
+ 	* [Update mlst and/or cgmlst dataset](#update-mlst-and/or-cgmlst-dataset)
 	
 	* [Running Pneumo-Typer](#running-Pneumo-Typer)
 	
