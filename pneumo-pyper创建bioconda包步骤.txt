@@ -1,0 +1,33 @@
+
+github密钥 Personal access tokens (classic): 
+
+1.切换到工作文件夹为“bioconda包推送”
+cd /Users/zilinyang/Desktop/bioconda包推送
+
+2.在github中进入bioconda-recipes,然后创建fork,下载bioconda-recipes到“bioconda包推送”文件夹
+git clone https://github.com/Xiangyang1984/bioconda-recipes.git
+
+注意: 必须确保bioconda-recipes为最新版本,如不是最新版本,请删除bioconda-recipes fork, 再次创建bioconda-recipes fork.
+
+3.将pneumo-typer-v1.0.1文件夹打包为pneumo-typer-v1.0.2.tar.gz
+tar czf pneumo-typer-v1.0.2.tar.gz pneumo-typer-v1.0.2
+
+4.获取shasum码
+shasum -a 256 pneumo-typer-v1.0.2.tar.gz
+
+5.将Pneumo-Typer-v1.0.2.tar.gz上传至网页https://www.microbialgenomic.cn/temp_dir
+perl /Users/zilinyang/Desktop/网页制作/autorun.pl pneumo-typer-v1.0.2.tar.gz
+
+6.将编写好的recipes “pneumo-typer” 复制到bioconda-recipes/recipes文件夹
+cp pneumo-typer bioconda-recipes/recipes
+
+7. 切换到工作文件夹为“bioconda-recipes”
+cd bioconda-recipes
+创建分支
+git checkout master #先切换到主分支(master), 并保证你的主分支处于最新状态
+git checkout -b pneumo-typer #创建新的分支，用于处理当前的菜谱
+git add recipes/pneumo-typer
+git commit -m "add pneumo-typer recipes"
+git push origin pneumo-typer --force
+
+在https://github.com/Xiangyang1984/bioconda-recipes网页界面会出现 "compare and pull requests",点击进入后,open pull requests,然后根据测试结果,对recipes进行调试直至成功为止.
