@@ -1,0 +1,32 @@
+在Xiangyang1984账户下本地上传软件包到github. 密码：
+
+1.创建软件包Pneumo-Typer,并进入Pneumo-Typer文件夹
+
+2.如果软件包中有大文件,首先将大文件移出Pneumo-Typer文件夹,然后依次运行以下命令:
+git init
+git add . 将Pneumo-Typer文件夹下所有文件添加到上传目录中,大文件除外
+git commit -m "v1.0.2 version"
+
+3.大文件处置:
+a.打开网页https://git-lfs.com/,下载git-lfs-darwin-amd64-v3.4.0.zip,进入安装包,运行sh install.sh即可安装git-lfs
+
+b.将大文件放入Pneumo-Typer文件夹对应位置
+
+c.运行下列命令生成.gitattributes文件
+git lfs track "ST_tool/database/cgmlst/cgMLST_profiles"
+git lfs track "ST_tool/database/cgmlst/cgMLSA_loci/cgMLSA_loci.fas"
+
+d.将大文件添加到上传目录中
+git add .gitattributes
+git add ST_tool/database/cgmlst/cgMLST_profiles
+git add ST_tool/database/cgmlst/cgMLSA_loci/cgMLSA_loci.fas
+
+e.git commit -m "add large file"
+
+4.运行下列命令完成上传
+git branch -M main
+git remote add origin https://github.com/Xiangyang1984/Pneumo-Typer.git
+git push -u origin main --force
+
+如出现fatal: The remote end hung up unexpectedly错误
+运行:git config http.postBuffer 524288000
