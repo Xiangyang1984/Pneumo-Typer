@@ -1,6 +1,6 @@
 在Xiangyang1984账户下本地上传软件包到github. 密码：
 
-1.创建软件包Pneumo-Typer,并进入Pneumo-Typer文件夹
+1.创建软件包Pneumo-Typer,并进入Pneumo-Typer文件夹，此文件夹名必须保持与github的Pneumo-Typer保持一致
 
 2.如果软件包中有大文件,首先将大文件移出Pneumo-Typer文件夹,然后依次运行以下命令:
 git init
