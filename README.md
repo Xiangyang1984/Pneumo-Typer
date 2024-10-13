@@ -14,7 +14,7 @@ Pneumo-Typer is a comprehensive prediction and visualization of serotype and seq
 	
  * [Usage](#usage)
 	
- 	* [Update mlst and/or cgmlst dataset](#Update-mlst-and/or-cgmlst-dataset)
+ 	* [Update mlst and cgmlst dataset](#update-mlst-and-cgmlst-dataset)
 	
 	* [Running Pneumo-Typer](#running-Pneumo-Typer)
 	
@@ -146,7 +146,7 @@ Before using Pneumo-Typer, users should update the mlst dataset for ST analysis 
 It is very simple to use Pneumo-Typer. First, prepare input data, at least containing a Genbank_file_directory (containing files in GenBank format, FASTA format, or a combination of both); then, run Pneumo-Typer like this "perl pneumo-typer.pl -d Genbank_file_directory". 
 
 
-## Update mlst and/or cgmlst dataset
+## Update mlst and cgmlst dataset
 
 Before using Pneumo-Typer, users should run path_to_update_mlstdb_cgmlstdb.pl to update the mlst and/or cgmlst dataset (optinal).
 
