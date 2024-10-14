@@ -154,7 +154,7 @@ Before using Pneumo-Typer, users should run path_to_update_mlstdb_cgmlstdb.pl to
 	
 	$ perl path_to_update_mlstdb_cgmlstdb.pl -m T -c F
 
-#### Update both mlst dataset and cgmlst dataset using the following command with 4 parallels
+#### Update both mlst dataset and cgmlst dataset with 4 parallels (note: sets more parallels may lead to download failtures for some genes) using the following command 
 	
 	$ perl path_to_update_mlstdb_cgmlstdb.pl -m T -c T -t 4
 
