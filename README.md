@@ -1,7 +1,7 @@
 Pneumo-Typer
 ===
 
-Pneumo-Typer is a comprehensive prediction and visualization of serotype and sequence type for streptococcus pneumoniae using assembled genomes. It is freely available at https://www.microbialgenomic.cn/Pneumo-Typer.html and https://github.com/Xiangyang1984/Pneumo-Typer under an open-source GPLv3 license.
+Pneumo-Typer is an integrated tool for simultaneous identification of serotype, sequence type, and capsule genotype in Streptococcus pneumoniae. It is freely available at https://www.microbialgenomic.cn/Pneumo-Typer.html and https://github.com/Xiangyang1984/Pneumo-Typer under an open-source GPLv3 license.
 
 
 * [Installation](#installation)
@@ -44,9 +44,9 @@ Download Pneumo-Typer, and put the Pneumo-Typer directory into your PATH with th
  
 	***In case of downloading Source Code through git, two large-size files of Pneumo-Typer need to be downloaded manually.***.
 	* cgMLST_profiles
-	$ wget -c -O path_to_Pneumo-Typer/ST_tool/database/cgmlst/cgMLST_profiles https://media.githubusercontent.com/media/Xiangyang1984/Pneumo-Typer/main/ST_tool/database/cgmlst/cgMLST_profiles?download=true
+	$ wget -c -O path_to_Pneumo-Typer/ST_tool/database/cgmlst/cgMLST_profiles https://www.microbialgenomic.cn/temp_dir/cgMLST_profiles
 	* cgMLSA_loci.fas
-	$ wget -c -O path_to_Pneumo-Typer/ST_tool/database/cgmlst/cgMLSA_loci/cgMLSA_loci.fas https://media.githubusercontent.com/media/Xiangyang1984/Pneumo-Typer/main/ST_tool/database/cgmlst/cgMLSA_loci/cgMLSA_loci.fas?download=true
+	$ wget -c -O path_to_Pneumo-Typer/ST_tool/database/cgmlst/cgMLSA_loci/cgMLSA_loci.fas https://www.microbialgenomic.cn/temp_dir/cgMLSA_loci.fas
 
 	$ export PATH=/path/to/Pneumo-Typer/:$PATH
 	```
