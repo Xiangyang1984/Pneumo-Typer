@@ -44,9 +44,9 @@ Download Pneumo-Typer, and put the Pneumo-Typer directory into your PATH with th
  
 	***In case of downloading Source Code through git, two large-size files of Pneumo-Typer need to be downloaded manually.***.
 	* cgMLST_profiles
-	$ wget -c -O path_to_Pneumo-Typer/ST_tool/database/cgmlst/cgMLST_profiles https://www.microbialgenomic.cn/temp_dir/cgMLST_profiles
+	$ wget -c -O path_to_Pneumo-Typer/ST_tool/database/cgmlst/cgMLST_profiles https://www.microbialgenomic.cn/gz/cgMLST_profiles
 	* cgMLSA_loci.fas
-	$ wget -c -O path_to_Pneumo-Typer/ST_tool/database/cgmlst/cgMLSA_loci/cgMLSA_loci.fas https://www.microbialgenomic.cn/temp_dir/cgMLSA_loci.fas
+	$ wget -c -O path_to_Pneumo-Typer/ST_tool/database/cgmlst/cgMLSA_loci/cgMLSA_loci.fas https://www.microbialgenomic.cn/gz/cgMLSA_loci.fas
 
 	$ export PATH=/path/to/Pneumo-Typer/:$PATH
 	```
