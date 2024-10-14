@@ -69,6 +69,7 @@ if ($options{mlst} eq "T"){
     # download MLST gene sequences (7 genes)
     $nowtime = &get_log_time;
     print "[$nowtime] start to download mlst gene sequences\n";
+    system("rm $home_dir/ST_tool/database/mlst/MLSA_senven_loci/*.fas");
     open(MLST, $mlst_list);
     while(<MLST>){
         chomp;
@@ -79,6 +80,7 @@ if ($options{mlst} eq "T"){
     # download MLST profile
     $nowtime = &get_log_time;
     print "[$nowtime] strat to download mlst profile\n";
+    system("rm $home_dir/ST_tool/database/mlst/MLST_profiles");
     system("wget -q --no-check-certificate -O $home_dir/ST_tool/database/mlst/MLST_profiles -c https://rest.pubmlst.org/db/pubmlst_spneumoniae_seqdef/schemes/1/profiles_csv");
 }
 $nowtime = &get_log_time;
@@ -131,6 +133,7 @@ if ($options{cgmlst} eq "T"){
     # download cgMLST profile
     $nowtime = &get_log_time;
     print "[$nowtime] strat to download cgmlst profile\n";
+    system("rm $home_dir/ST_tool/database/cgmlst/cgMLST_profiles");
     system("wget -q --no-check-certificate -O $home_dir/ST_tool/database/cgmlst/cgMLST_profiles -c https://rest.pubmlst.org/db/pubmlst_spneumoniae_seqdef/schemes/2/profiles_csv");
     $nowtime = &get_log_time;
     print "[$nowtime] Finish cgmlst dataset update\n\n";
@@ -144,4 +147,3 @@ sub get_log_time {
     my $time = strftime("%Y-%m-%d %H:%M:%S", localtime);
     return ($time);
 }
-     
