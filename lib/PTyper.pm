@@ -1028,7 +1028,7 @@ sub mapping {
     open (NEG, ">$serotype_negtive_strain");
     foreach my $pdg (@pdg){
         print NEG "$pdg\tcps no dected\n" if scalar keys %strains == 0;
-        print NEG "$pdg\tcps no dected\n" if grep($pdg ne $_, keys %strains) && scalar keys %strains != 0;
+        print NEG "$pdg\tcps no dected\n" if !grep($pdg eq $_, keys %strains) && scalar keys %strains != 0;
     }
 }
 
