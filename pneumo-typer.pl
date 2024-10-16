@@ -126,7 +126,7 @@ if ( defined( $options{help} ) ) {
 }
 
 if (defined $options{version}) {
-    print "\nVersion: Pneumo-Typer v1.0.2\n\n";
+    print "\nVersion: Pneumo-Typer v1.0.3\n\n";
     exit(1);  
 }
 
