@@ -14,7 +14,7 @@ use font_rotate;
 use process;
 use metrics;
 
-use vars qw($image %hash_nif %color_hash %cluster_color_hash %cluster_color_hash_2 %direction_F_R %shift_distance_x $yellow $green $blue $black $black2 $red $white $gray $dgray $tree_width @array_image %cluster_GeneName_hash @rgb_color %tab_hash $width_tab_file $Gene_height);
+use vars qw($image %hash_nif %color_hash %cluster_color_hash %cluster_color_hash_2 %direction_F_R %shift_distance_x $yellow $green $blue $black $black2 $red $white $gray $dgray $tree_width @array_image %cluster_GeneName_hash @rgb_color %tab_hash $width_tab_file $Gene_height @add_head);
 
 #create a svg image 
 
@@ -104,8 +104,11 @@ sub create_image_SVG {
 
         my %length_str;
         open (T, $options{expand_tab});
-        <T>;
-        while(<T>){
+        my @exp_tab = <T>;
+        my $add_head = shift @exp_tab;
+        @add_head = split /\t/, $add_head;
+        shift @add_head;
+        foreach(@exp_tab){
             chomp;
             my @tab = split /\t/, $_;
             #print "$tab[0]\t$tab[1]\n";
@@ -392,10 +395,10 @@ sub draw_map_SVG {
     if (defined $tab_hash{$filename}){
 
         my @tab_text = split /\t/, $tab_hash{$filename};
-	my @add_head;
-        @add_head = ("Serotype") if scalar @tab_text ==1;
-        @add_head = ("Serotype", "ST") if scalar @tab_text ==2;
-        @add_head = ("Serotype", "ST", "cgST") if scalar @tab_text ==3;
+	    #my @add_head;
+        #@add_head = ("Serotype") if scalar @tab_text ==1;
+        #@add_head = ("Serotype", "ST") if scalar @tab_text ==2;
+        #@add_head = ("Serotype", "ST", "cgST") if scalar @tab_text ==3;
         my $extand_rigth_distance = 0;
         my $ccccnum = 0;
         foreach (@tab_text){
@@ -583,7 +586,7 @@ my $tip = 5; # extra space between tip and label
 
     #open (STRAIN_REORDER_FILE, ">$temp_strain_reorder_file");
     #my $count_number=0;
-    my @strain_order = reverse $tree_object->get_nodes(-order => 'depth');
+    my @strain_order = reverse $tree_object->get_nodes(-order => 'depth', sortby => 'height');
     pop @strain_order; # skip root
 
     my $y = $up_shift+$ystep;
@@ -666,7 +669,7 @@ if($show_tree_topology eq "T") {
         
         }
 
-        my @preorder = $tree_object->get_nodes(-order => 'depth');
+        my @preorder = $tree_object->get_nodes(-order => 'depth', sortby => 'height');
 
         my $root_strain = shift @preorder; # skip root
 
@@ -704,7 +707,7 @@ if($show_tree_topology eq "T") {
 
     }
 
-    my @strain_tree = reverse $tree_object->get_nodes(-order => 'depth');
+    my @strain_tree = reverse $tree_object->get_nodes(-order => 'depth', sortby => 'height');
     pop @strain_tree; # skip root
 
     for my $taxon (@strain_tree) {
@@ -824,7 +827,7 @@ sub tree_width {
 
     open (STRAIN_REORDER_FILE, ">$temp_strain_reorder_file");
     my $count_number=0;
-    my @strain_order1 = reverse $tree_obj->get_nodes(-order => 'depth');
+    my @strain_order1 = reverse $tree_obj->get_nodes(-order => 'depth', sortby => 'height');
     pop @strain_order1; # skip root
     for my $node_leaf1 (@strain_order1) {
         #print $node_leaf->id;
