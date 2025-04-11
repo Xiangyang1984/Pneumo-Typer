@@ -179,7 +179,7 @@ Pneumo-Typer will perform serotype prediction, heatmap and figure creation, and 
 	*heatmap_class.svg: a heatmap of the distribution of cps gene at class level
   
 	*cps_cluster.svg: a figure showing the genetic organization of cps gene cluster
-		
+![这是图片]([(https://github.com/Xiangyang1984/Pneumo-Typer/blob/eddc793e60da291020020eae0d25f5314d867df5/CPS_operon.svg] "Magic Gardens")
 Setting "-c" to "T" will perform cgST analysis which takes quite a long time (about 3 min for one genome), and the cgST information will also be shown on maps.
 
 #### Example 2: A Newick format tree file is used by Pneumo-Typer to automatically associate the distribution of cps gene and genetic organization of cps cluster with their phylogeny.
