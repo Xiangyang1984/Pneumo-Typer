@@ -273,7 +273,7 @@ if ( ($options{recreate_heatmap} eq "F")  && ($options{recreate_figure} eq "F") 
 
     print "\nSTEP-5: Output sequence type, serotype and capsule genotype results\n";
 
-    system ("perl $home_directory/script/ser_join_ST.pl $workplace/Serotype.out $workplace/ST_out.txt $workplace/cgST_out.txt $workplace/Serotype_ST.out $workplace/capsule_genotype.out");
+    system ("perl $home_directory/script/ser_join_ST.pl $workplace/Serotype.out $workplace/ST_out.txt $workplace/cgST_out.txt $workplace/Serotype_CapT_ST.out $workplace/capsule_genotype.out");
 
 
 
@@ -283,10 +283,10 @@ if ( ($options{recreate_heatmap} eq "F")  && ($options{recreate_figure} eq "F") 
     open (MAP_CMD, ">$map_cmd");
 
     print "\nSTEP-6: Heatmaping the cps gene distribution in genomes\n";
-    my $cmd_1 ="perl $home_directory/script/heatmap.pl -dir $workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf $workplace/result_statistics/Statistics_OUT/classification_CPS -e $workplace/Serotype_ST.out -o $workplace";
+    my $cmd_1 ="perl $home_directory/script/heatmap.pl -dir $workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf $workplace/result_statistics/Statistics_OUT/classification_CPS -e $workplace/Serotype_CapT_ST.out -o $workplace";
     system ("$cmd_1"); 
 
-    my $cmd_2 ="perl $home_directory/script/heatmap.pl -dir $workplace/result_statistics/tbl_heatmap_gene -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf $workplace/result_statistics/Statistics_OUT/classification_gene -e $workplace/Serotype_ST.out -o $workplace";
+    my $cmd_2 ="perl $home_directory/script/heatmap.pl -dir $workplace/result_statistics/tbl_heatmap_gene -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf $workplace/result_statistics/Statistics_OUT/classification_gene -e $workplace/Serotype_CapT_ST.out -o $workplace";
     system ("$cmd_2"); 
 
     print "\nSTEP-7: Visualizing the cps gene cluster for genomes\n";
@@ -304,7 +304,7 @@ if ( ($options{recreate_heatmap} eq "F")  && ($options{recreate_figure} eq "F") 
     mkdir $homologs_cluster;
     system ("perl $home_directory/script/mcr.pl $workplace/CPS_cluster_mapping.result $homologs_cluster/all_orthomcl.out");
 
-    my $cmd_3 = "perl $home_directory/script/cps_cluster.pl -dir $path_genbank -gene $gcluster_workplace/interested_gene.txt -m $thread_number -map T -o $gcluster_workplace -SVG T -n 40 -e $workplace/Serotype_ST.out";
+    my $cmd_3 = "perl $home_directory/script/cps_cluster.pl -dir $path_genbank -gene $gcluster_workplace/interested_gene.txt -m $thread_number -map T -o $gcluster_workplace -SVG T -n 40 -e $workplace/Serotype_CapT_ST.out";
     system ("$cmd_3"); 
 
     print MAP_CMD "heatmap_class:\n$cmd_1\n\nheatmap_gene:\n$cmd_2\n\ncps gene cluster:\n$cmd_3\n";
