@@ -197,7 +197,7 @@ Setting "-c" to "T" will perform cgST analysis which takes quite a long time (ab
 
 | ![CPS Operon Diagram](https://raw.githubusercontent.com/Xiangyang1984/Pneumo-Typer/eddc793e60da291020020eae0d25f5314d867df5/CPS_operon.svg) |
 |:---:|
-| **Figure 1**: a figure of the genetic organization of cps gene created by Pnuemo-Typer in Example 2|
+| **Figure 1**. A figure of the genetic organization of cps gene created by Pnuemo-Typer in Example 2|
 
 #### Example 3: A two-column tab-delimited text file is used to sort genomes from up to down according to users' requirement
 
