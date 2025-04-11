@@ -171,7 +171,7 @@ Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genom
 Pneumo-Typer will perform serotype prediction, heatmap and figure creation, and ST analysis with 10 threads, output results as follows:
 * a. ST results
 * b. predicted serotype results
-* c. capsule genetype results, Notes:
+* c. capsule genetype results. Notes: the serotype labeled by CapT is the one with the highest number of matching capsule genes (serotype alignment). The serotype output by  the software is further refined against several serotype-specific markers (serotype refinement) based on the initial serotype alignment. Therefore, discrepancies may exist between the CapT-labeled serotype and the software-output serotype: the former reflects the capsule gene matching status, while the latter represents the true serotype.
 * d. create three maps with the ST, predicted serotype, capsule genetype information showed
 
 	*heatmap_gene.svg: a heatmap of the distribution of cps gene at gene level
