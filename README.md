@@ -180,10 +180,6 @@ Pneumo-Typer will perform serotype prediction, heatmap and figure creation, and 
   
 	*cps_cluster.svg: a figure showing the genetic organization of cps gene cluster
 
-| ![CPS Operon Diagram](https://raw.githubusercontent.com/Xiangyang1984/Pneumo-Typer/eddc793e60da291020020eae0d25f5314d867df5/CPS_operon.svg) |
-|:---:|
-| **Figure 1**: CPS cluster created by Pnuemo-Typer using the command of Example 1|
-
 Setting "-c" to "T" will perform cgST analysis which takes quite a long time (about 3 min for one genome), and the cgST information will also be shown on maps.
 
 #### Example 2: A Newick format tree file is used by Pneumo-Typer to automatically associate the distribution of cps gene and genetic organization of cps cluster with their phylogeny.
@@ -199,14 +195,16 @@ Setting "-c" to "T" will perform cgST analysis which takes quite a long time (ab
 	
 	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -Rf T -tree path_to_18_genome_tree.nwk
 
-	
+| ![CPS Operon Diagram](https://raw.githubusercontent.com/Xiangyang1984/Pneumo-Typer/eddc793e60da291020020eae0d25f5314d867df5/CPS_operon.svg) |
+|:---:|
+| **Figure 1**: a figure of the genetic organization of cps gene created by Pnuemo-Typer in Example 2|
+
 #### Example 3: A two-column tab-delimited text file is used to sort genomes from up to down according to users' requirement
 
 Here, we provided a srf file named ["18_genome_order.txt"](https://www.microbialgenomic.cn/temp_dir/18_genome_order.txt) that orders the maps by serotypes. For example, users can reorder genomes in the genetic organization of the cps cluster.
 
 	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -Rf T -srf path_to_18_genome_order.txt
 		  
-
 ## Detailed Explanations for Arguments in Pneumo-Typer
 
 ```
