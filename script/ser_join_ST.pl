@@ -21,7 +21,7 @@ if ($ARGV[4]){  #metedata extracted from gbk files
     open(META, $ARGV[4]);
     while(<META>){
         chomp;
-        $meta{(split /\t/, $_)[0]} = (split /\t/, $_)[4];
+        $meta{(split /\t/, $_)[0]} = (split /\t/, $_)[1];
     }
     close META;
 }
@@ -62,9 +62,9 @@ my @array = <LOCUS_FILE>;
 my $header = shift @array;
 chomp $header;
 if (defined $meta{(split /\t/, $array[0])[0]}){
-    print FINAL "$header\tTrue serotype\tST\tcgST\n" if (-e $st && -e $cgst); 
-    print FINAL "$header\tTrue serotype\tcgST\n" if ( !(-e $st) && -e $cgst); 
-    print FINAL "$header\tTrue serotype\tST\n" if (-e $st && !(-e $cgst) );
+    print FINAL "$header\tCapT\tST\tcgST\n" if (-e $st && -e $cgst); 
+    print FINAL "$header\tCapT\tcgST\n" if ( !(-e $st) && -e $cgst); 
+    print FINAL "$header\tCapT\tST\n" if (-e $st && !(-e $cgst) );
     print FINAL "$header\n" if ( !(-e $st) && !(-e $cgst) ); 
 }else{
     print FINAL "$header\tST\tcgST\n" if (-e $st && -e $cgst); 
