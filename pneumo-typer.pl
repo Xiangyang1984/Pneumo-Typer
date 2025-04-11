@@ -267,9 +267,13 @@ if ( ($options{recreate_heatmap} eq "F")  && ($options{recreate_figure} eq "F") 
 
     print "done\n"; #serotype prediction finished
 
-    print "\nSTEP-4: Output sequence type and serotype results\n";
+    print "\nSTEP-4: calculate capsule genotype\n";
 
-    system ("perl $home_directory/script/ser_join_ST.pl $workplace/Serotype.out $workplace/ST_out.txt $workplace/cgST_out.txt $workplace/Serotype_ST.out");
+    system ("perl $home_directory/script/capsule_genotype.pl $workplace/result_statistics/Statistics_OUT/CPS_LocusTag_statistics $workplace/capsule_genotype.out");
+
+    print "\nSTEP-5: Output sequence type, serotype and capsule genotype results\n";
+
+    system ("perl $home_directory/script/ser_join_ST.pl $workplace/Serotype.out $workplace/ST_out.txt $workplace/cgST_out.txt $workplace/Serotype_ST.out $workplace/capsule_genotype.out");
 
 
 
@@ -278,14 +282,14 @@ if ( ($options{recreate_heatmap} eq "F")  && ($options{recreate_figure} eq "F") 
 
     open (MAP_CMD, ">$map_cmd");
 
-    print "\nSTEP-5: Heatmaping the cps gene distribution in genomes\n";
+    print "\nSTEP-6: Heatmaping the cps gene distribution in genomes\n";
     my $cmd_1 ="perl $home_directory/script/heatmap.pl -dir $workplace/result_statistics/tbl_heatmap_class -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf $workplace/result_statistics/Statistics_OUT/classification_CPS -e $workplace/Serotype_ST.out -o $workplace";
     system ("$cmd_1"); 
 
     my $cmd_2 ="perl $home_directory/script/heatmap.pl -dir $workplace/result_statistics/tbl_heatmap_gene -left 20 -scale 4 -label T -dis 9 -w 4 -l 0 -right 50 -cf $workplace/result_statistics/Statistics_OUT/classification_gene -e $workplace/Serotype_ST.out -o $workplace";
     system ("$cmd_2"); 
 
-    print "\nSTEP-6: Visualizing the cps gene cluster for genomes\n";
+    print "\nSTEP-7: Visualizing the cps gene cluster for genomes\n";
 
     my $gcluster_workplace = "$workplace/cps_cluster_workplace";
     mkdir $gcluster_workplace;
@@ -314,7 +318,7 @@ my ($remap_cmd1, $remap_cmd2, $remap_cmd3) = &PTyper::obtain_map_cmd ($map_cmd, 
 #remap heatmap
 if ($options{recreate_heatmap} eq "T"){
 
-    print "\n    Re-create the heatmap of cps gene distribution in genomes (STEP-5)\n\n";
+    print "\n    Re-create the heatmap of cps gene distribution in genomes (STEP-6)\n\n";
     system ("$remap_cmd1");
     system ("$remap_cmd2");
 
@@ -323,12 +327,10 @@ if ($options{recreate_heatmap} eq "T"){
 #remap figure
 if ($options{recreate_figure} eq "T"){
 
-    print "\n    Re-create the figure of the genetic organlization of cps gene cluster for genomes (STEP-6)\n\n";
+    print "\n    Re-create the figure of the genetic organlization of cps gene cluster for genomes (STEP-7)\n\n";
     system ("$remap_cmd3");
 
 }
-
-
 
 my $finish_time = localtime;
 print "\n$finish_time: done!\n\n";
