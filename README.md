@@ -180,7 +180,7 @@ Pneumo-Typer will perform serotype prediction, heatmap and figure creation, and 
   
 	*cps_cluster.svg: a figure showing the genetic organization of cps gene cluster
 
-![这是图片]([https://github.com/Xiangyang1984/Pneumo-Typer/blob/eddc793e60da291020020eae0d25f5314d867df5/CPS_operon.svg] "Magic Gardens")
+![CPS Operon Diagram](https://raw.githubusercontent.com/Xiangyang1984/Pneumo-Typer/eddc793e60da291020020eae0d25f5314d867df5/CPS_operon.svg)
 
 Setting "-c" to "T" will perform cgST analysis which takes quite a long time (about 3 min for one genome), and the cgST information will also be shown on maps.
 
