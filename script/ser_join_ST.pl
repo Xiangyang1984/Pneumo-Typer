@@ -65,7 +65,7 @@ if (defined $meta{(split /\t/, $array[0])[0]}){
     print FINAL "$header\tCapT\tST\tcgST\n" if (-e $st && -e $cgst); 
     print FINAL "$header\tCapT\tcgST\n" if ( !(-e $st) && -e $cgst); 
     print FINAL "$header\tCapT\tST\n" if (-e $st && !(-e $cgst) );
-    print FINAL "$header\n" if ( !(-e $st) && !(-e $cgst) ); 
+    print FINAL "$header\tCapT\n" if ( !(-e $st) && !(-e $cgst) ); 
 }else{
     print FINAL "$header\tST\tcgST\n" if (-e $st && -e $cgst); 
     print FINAL "$header\tcgST\n" if ( !(-e $st) && -e $cgst); 
