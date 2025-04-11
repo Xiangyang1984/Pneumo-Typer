@@ -1,7 +1,7 @@
 Pneumo-Typer
 ===
 
-Pneumo-Typer is an integrated tool for simultaneous identification of serotype, sequence type, and capsule genotype in Streptococcus pneumoniae. It is freely available at https://www.microbialgenomic.cn/Pneumo-Typer.html and https://github.com/Xiangyang1984/Pneumo-Typer under an open-source GPLv3 license.
+Pneumo-Typer is a high-throughput capsule genotype visualization tool with integrated serotype and sequence type prediction for Streptococcus pneumoniae. It is freely available at https://www.microbialgenomic.cn/Pneumo-Typer.html and https://github.com/Xiangyang1984/Pneumo-Typer under an open-source GPLv3 license.
 
 When using pneumo-typer, please cited: Xiangyang Li, Yaoyao Zhu, Zilin Yang, Yanzi Li, Guohui Zhang, Xiangyu Wang, Xuan Zhao, Yinyan Huang, Huajie Zhang, Bingqing Li, Zhongrui Ma. Pneumo-Typer: a high-throughput capsule genotype visualization tool with integrated serotype and sequence type prediction for Streptococcus pneumoniae, biorxiv, 2025, https://doi.org/10.1101/2025.02.13.638184.
 
@@ -171,7 +171,8 @@ Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genom
 Pneumo-Typer will perform serotype prediction, heatmap and figure creation, and ST analysis with 10 threads, output results as follows:
 * a. ST results
 * b. predicted serotype results
-* c. create three maps with the ST and predicted serotype and information showed
+* c. capsule genetype results, Notes:
+* d. create three maps with the ST, predicted serotype, capsule genetype information showed
 
 	*heatmap_gene.svg: a heatmap of the distribution of cps gene at gene level
   
