@@ -28,7 +28,7 @@ When using pneumo-typer, please cited: Xiangyang Li, Yaoyao Zhu, Zilin Yang, Yan
 Pneumo-Typer is a Perl script that doesn't need compilation. But before running, Pneumo-Typer needs to pre-install prodigal, blat, blast, and several Perl modules. There are two ways to install the Pneumo-Typer.
 
 ## Installing the Pneumo-Typer via Conda
-We have built a bioconda package for Pneumo-Typer v1.0.3. Users are recommended to install the [conda](https://www.anaconda.com), and then install this package simply with the following command:
+We have built a bioconda package for Pneumo-Typer v2.0.1. Users are recommended to install the [conda](https://www.anaconda.com), and then install this package simply with the following command:
 
 	$ conda install -c bioconda pneumo-typer
 
@@ -40,7 +40,7 @@ Installation of Pneumo-Typer can be accomplished by downloading the code (at htt
 Download Pneumo-Typer, and put the Pneumo-Typer directory into your PATH with the following command：
 
 	```
-	$ wget -c https://www.microbialgenomic.cn/gz/pneumo-typer-v1.0.3.tar.gz (***Recommended to use***)
+	$ wget -c https://www.microbialgenomic.cn/gz/pneumo-typer-v2.0.1.tar.gz (***Recommended to use***)
 
 	$ git clone https://github.com/xiangyang1984/Pneumo-Typer.git (***Not recommended to use***)
  
