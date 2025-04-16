@@ -162,7 +162,7 @@ Before using Pneumo-Typer, users should run path_to_update_mlstdb_cgmlstdb.pl to
 
 ## Running Pneumo-Typer
 
-Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genomes are under a directory named "18_genomes_dir"([downoload 18_genomes_dir.tar.gz](https://www.microbialgenomic.cn/gz/pneumotyperData/18_genomes_dir.tar.gz)).
+Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genomes are under a directory named "18_genomes"([downoload 18_genomes.tar.gz](https://www.microbialgenomic.cn/gz/pneumotyperData/18_genomes.tar.gz)).
 
 #### Example 1: Run Pneumo-Typer is an easy task by using the following command
 	
@@ -171,10 +171,10 @@ Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genom
 Pneumo-Typer will perform serotype prediction, heatmap and figure creation, and ST analysis with 10 threads, output results as follows:
 * a. Serotype.out: a table shows predicted serotype results.
 * b. capsule_genotype.out: a table shows capsule genetype results. Notes: the serotype labeled by CapT is the one with the highest number of matching capsule genes (serotype alignment). The serotype output by the Pneumo-Typer is further refined against several serotype-specific markers (serotype refinement) based on the initial serotype alignment. Therefore, discrepancies may exist between the CapT-labeled serotype and the software-output serotype: the former reflects the capsule gene matching status, while the latter represents the true serotype.
-* c. ST_out.txt: a table shows ST results
+* c. ST_out.txt: a table shows ST results.
 * d. cgST_out.txt: a table shows cgST results (Optinal, cgST is not carried out in this example)
 * e. Serotype_CapT_ST.out: a table merging of predicted serotype, capsule genetype, and ST/cgST.
-* d. create three maps with the predicted serotype, capsule genetype, ST/cgST information showed
+* f. create three maps with the predicted serotype, capsule genetype, ST/cgST information showed
 
 	*heatmap_gene.svg: a heatmap of the distribution of cps gene at gene level (Figue 1)
   
@@ -184,9 +184,21 @@ Pneumo-Typer will perform serotype prediction, heatmap and figure creation, and 
 
 Setting "-c" to "T" will perform cgST analysis which takes quite a long time (about 3 min for one genome), and the cgST information will also be shown on maps.
 
+| ![heatmap_gene.svg Diagram](https://raw.githubusercontent.com/Xiangyang1984/Pneumo-Typer/eddc793e60da291020020eae0d25f5314d867df5/CPS_operon.svg) |
+|:---:|
+| **Figure 1**. A heatmap dispalying the distribution of the cps gene at the gene level created by Pnuemo-Typer in Example 1|
+
+| ![heatmap_class.svg Diagram](https://raw.githubusercontent.com/Xiangyang1984/Pneumo-Typer/eddc793e60da291020020eae0d25f5314d867df5/CPS_operon.svg) |
+|:---:|
+| **Figure 2**. A heatmap dispalying the distribution of the cps gene at the class level created by Pnuemo-Typer in Example 1|
+
+| ![CPS_operon.svg Diagram](https://raw.githubusercontent.com/Xiangyang1984/Pneumo-Typer/eddc793e60da291020020eae0d25f5314d867df5/CPS_operon.svg) |
+|:---:|
+| **Figure 3**. A figure of the genetic organization of cps gene created by Pnuemo-Typer in Example 1|
+
 #### Example 2: A Newick format tree file is used by Pneumo-Typer to automatically associate the distribution of cps gene and genetic organization of cps cluster with their phylogeny.
 
-[18_genome_tree.nwk](https://www.microbialgenomic.cn/gz/pneumotyperData/18_genomes_tree.nwk): a tree file, it was a nwk format phylogenetic tree of 18 genomes using RaxML. 
+[18_genomes_tree.nwk](https://www.microbialgenomic.cn/gz/pneumotyperData/18_genomes_tree.nwk): a tree file, it was a nwk format phylogenetic tree of 18 genomes using RaxML. 
  
 
 *Create two heatmaps according to the distribution of the cps gene at the gene and class level using the following command:
@@ -197,13 +209,13 @@ Setting "-c" to "T" will perform cgST analysis which takes quite a long time (ab
 	
 	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -Rf T -tree path_to_18_genomes_tree.nwk
 
-| ![CPS Operon Diagram](https://raw.githubusercontent.com/Xiangyang1984/Pneumo-Typer/eddc793e60da291020020eae0d25f5314d867df5/CPS_operon.svg) |
+| ![CPS Operon_Tree Diagram](https://raw.githubusercontent.com/Xiangyang1984/Pneumo-Typer/eddc793e60da291020020eae0d25f5314d867df5/CPS_operon_Tree.svg) |
 |:---:|
 | **Figure 1**. A figure of the genetic organization of cps gene created by Pnuemo-Typer in Example 2|
 
 #### Example 3: A two-column tab-delimited text file is used to sort genomes from up to down according to users' requirement
 
-Here, we provided a srf file named ["18_genome_order.txt"](https://www.microbialgenomic.cn/gz/pneumotyperData/18_genomes_order.txt) that orders the maps by serotypes. For example, users can reorder genomes in the genetic organization of the cps cluster.
+Here, we provided a srf file named ["18_genomes_order.txt"](https://www.microbialgenomic.cn/gz/pneumotyperData/18_genomes_order.txt) that orders the maps by serotypes. For example, users can reorder genomes in the genetic organization of the cps cluster.
 
 	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -Rf T -srf path_to_18_genomes_order.txt
 		  
