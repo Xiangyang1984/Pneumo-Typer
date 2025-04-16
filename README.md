@@ -151,18 +151,16 @@ It is very simple to use Pneumo-Typer. First, prepare input data, at least conta
 
 ## Update mlst and cgmlst dataset
 
-Before using Pneumo-Typer, users should run path_to_update_mlstdb_cgmlstdb.pl to update the mlst and/or cgmlst dataset (optinal).
+Before using Pneumo-Typer, users should run update_mlstdb_cgmlstdb (installed via conda) or path_to_update_mlstdb_cgmlstdb.pl to update the mlst and/or cgmlst dataset (optinal).
 
 #### Update only mlst dataset using the following command
 	
-	$ update_mlstdb_cgmlstdb -m T -c F (installed via conda)
-or
-        $ perl path_to_update_mlstdb_cgmlstdb.pl -m T -c F
+	$ update_mlstdb_cgmlstdb -m T -c F
 
 
 #### Update both mlst dataset and cgmlst dataset with 4 parallels (note: sets more parallels may lead to download failtures for some genes) using the following command 
 	
-	$ perl path_to_update_mlstdb_cgmlstdb.pl -m T -c T -t 4
+	$ update_mlstdb_cgmlstdb -m T -c T -t 4
 
 ## Running Pneumo-Typer
 
@@ -170,7 +168,7 @@ Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genom
 
 #### Example 1: Run Pneumo-Typer is an easy task by using the following command
 	
-	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -t 10 -m T
+	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -t 10 -m T 
  
 Pneumo-Typer will perform serotype prediction, capsule genetype assignment, ST analysis, map creation using 10 threads, output results as follows:
 * a. Serotype.out: a table shows predicted serotype results.
