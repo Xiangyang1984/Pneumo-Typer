@@ -184,15 +184,15 @@ Pneumo-Typer will perform serotype prediction, heatmap and figure creation, and 
 
 Setting "-c" to "T" will perform cgST analysis which takes quite a long time (about 3 min for one genome), and the cgST information will also be shown on maps.
 
-| ![heatmap_gene.svg Diagram](https://raw.githubusercontent.com/Xiangyang1984/Pneumo-Typer/eddc793e60da291020020eae0d25f5314d867df5/CPS_operon.svg) |
+| ![heatmap_gene.svg Diagram](https://github.com/Xiangyang1984/Pneumo-Typer/blob/e70611d1245fb6d2339fe67bb3489dcafa7900aa/example_fig/heatmap_gene.svg) |
 |:---:|
 | **Figure 1**. A heatmap dispalying the distribution of the cps gene at the gene level created by Pnuemo-Typer in Example 1|
 
-| ![heatmap_class.svg Diagram](https://raw.githubusercontent.com/Xiangyang1984/Pneumo-Typer/eddc793e60da291020020eae0d25f5314d867df5/CPS_operon.svg) |
+| ![heatmap_class.svg Diagram](https://github.com/Xiangyang1984/Pneumo-Typer/blob/e70611d1245fb6d2339fe67bb3489dcafa7900aa/example_fig/heatmap_class.svg) |
 |:---:|
 | **Figure 2**. A heatmap dispalying the distribution of the cps gene at the class level created by Pnuemo-Typer in Example 1|
 
-| ![CPS_operon.svg Diagram](https://raw.githubusercontent.com/Xiangyang1984/Pneumo-Typer/eddc793e60da291020020eae0d25f5314d867df5/CPS_operon.svg) |
+| ![CPS_operon.svg Diagram](https://github.com/Xiangyang1984/Pneumo-Typer/blob/e70611d1245fb6d2339fe67bb3489dcafa7900aa/example_fig/CPS_operon.svg) |
 |:---:|
 | **Figure 3**. A figure of the genetic organization of cps gene created by Pnuemo-Typer in Example 1|
 
@@ -209,9 +209,9 @@ Setting "-c" to "T" will perform cgST analysis which takes quite a long time (ab
 	
 	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -Rf T -tree path_to_18_genomes_tree.nwk
 
-| ![CPS Operon_Tree Diagram](https://raw.githubusercontent.com/Xiangyang1984/Pneumo-Typer/eddc793e60da291020020eae0d25f5314d867df5/CPS_operon_Tree.svg) |
+| ![CPS Operon_Tree Diagram](https://github.com/Xiangyang1984/Pneumo-Typer/blob/e70611d1245fb6d2339fe67bb3489dcafa7900aa/example_fig/CPS_operon_Tree.svg) |
 |:---:|
-| **Figure 1**. A figure of the genetic organization of cps gene created by Pnuemo-Typer in Example 2|
+| **Figure 4**. A figure of the genetic organization of cps gene associated with phylogenetic tree by Pnuemo-Typer in Example 2|
 
 #### Example 3: A two-column tab-delimited text file is used to sort genomes from up to down according to users' requirement
 
