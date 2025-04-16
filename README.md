@@ -80,7 +80,8 @@ This software is available at https://genome.ucsc.edu/FAQ/FAQblat.html
 ## Test the Pneumo-Typer with Example Data
 Once Pneumo-Typer installation is finished, a small dataset in the **./Test_data** directory can be used to test whether Pneumo-Typer (**pneumo-typer.pl**) can run on your system (**Linux/MacOS**) successfully or not using the command as below:
 
-	$ perl pneumo-typer.pl -Ts T
+	$ pneumo-typer -Ts T (installed via conda)
+        or perl path_to_pneumo-typer.pl -Ts T
 	
 	Test-step1: Checks for pneumo-typer dependencies...
 	################################################################
@@ -168,7 +169,7 @@ Here, we used 18 genomes as an example to show how to use Pneumo-Typer. 18 genom
 	
 	$ perl path_to_pneumo-typer.pl -d path_to_18_genomes_dir -t 10 -m T
  
-Pneumo-Typer will perform serotype prediction, heatmap and figure creation, and ST analysis with 10 threads, output results as follows:
+Pneumo-Typer will perform serotype prediction, capsule genetype assignment, ST analysis, map creation using 10 threads, output results as follows:
 * a. Serotype.out: a table shows predicted serotype results.
 * b. capsule_genotype.out: a table shows capsule genetype results. Notes: the serotype labeled by CapT is the one with the highest number of matching capsule genes (serotype alignment). The serotype output by the Pneumo-Typer is further refined against several serotype-specific markers (serotype refinement) based on the initial serotype alignment. Therefore, discrepancies may exist between the CapT-labeled serotype and the software-output serotype: the former reflects the capsule gene matching status, while the latter represents the true serotype.
 * c. ST_out.txt: a table shows ST results.
