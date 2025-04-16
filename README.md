@@ -157,7 +157,6 @@ Before using Pneumo-Typer, users should run path_to_update_mlstdb_cgmlstdb.pl to
 	
 	$ update_mlstdb_cgmlstdb -m T -c F (installed via conda)
 or
-
         $ perl path_to_update_mlstdb_cgmlstdb.pl -m T -c F
 
 
