@@ -7,7 +7,7 @@ use POSIX;
 
 my $usage = <<USAGE; 
 
-# Usage: perl updata_mlstdb_cgmlstdb.pl [-m T] [-c T] [-t parallel_number]
+# Usage: perl update_mlstdb_cgmlstdb.pl [-m T] [-c T] [-t parallel_number]
 
 ####################
 =ARGUMENTS
@@ -61,6 +61,9 @@ open (LOG, ">$log");
 my $mlst_list = "$home_dir/ST_tool/database/mlst_list.txt";
 my $cgmlst_list = "$home_dir/ST_tool/database/cgmlst_list.txt";
 
+# ***RESTful_API_download_pubmlst.pl needs token which is located in "$home_dir/ST_tool"
+chdir "$home_dir/ST_tool";
+
 my $nowtime;
 ### mlst dataset
 if ($options{mlst} eq "T"){
@@ -73,15 +76,24 @@ if ($options{mlst} eq "T"){
     open(MLST, $mlst_list);
     while(<MLST>){
         chomp;
-        my $downsite = "https://rest.pubmlst.org/db/pubmlst_spneumoniae_seqdef/loci/".$_."/alleles_fasta";
-        system("wget -q --no-check-certificate -O $home_dir/ST_tool/database/mlst/MLSA_senven_loci/$_.fas -c $downsite");
+	#my $downsite = "https://rest.pubmlst.org/db/pubmlst_spneumoniae_seqdef/loci/".$_."/alleles_fasta";
+	#system("wget -q --no-check-certificate -O $home_dir/ST_tool/database/mlst/MLSA_senven_loci/$_.fas -c $downsite");
+	
+	#OAuth credentials for download full database from pubMLST (https://bigsdb.readthedocs.io/en/latest/rest.html#api-oauth)
+	my $downsite_loci = "loci/".$_."/alleles_fasta";
+	system("perl $home_dir/ST_tool/RESTful_API_download_pubmlst.pl --route $downsite_loci --output $home_dir/ST_tool/database/mlst/MLSA_senven_loci/$_.fas");
+        
     }
     
     # download MLST profile
     $nowtime = &get_log_time;
     print "[$nowtime] strat to download mlst profile\n";
     system("rm $home_dir/ST_tool/database/mlst/MLST_profiles");
-    system("wget -q --no-check-certificate -O $home_dir/ST_tool/database/mlst/MLST_profiles -c https://rest.pubmlst.org/db/pubmlst_spneumoniae_seqdef/schemes/1/profiles_csv");
+    #system("wget -q --no-check-certificate -O $home_dir/ST_tool/database/mlst/MLST_profiles -c https://rest.pubmlst.org/db/pubmlst_spneumoniae_seqdef/schemes/1/profiles_csv");
+    
+    #OAuth credentials for download full database from pubMLST (https://bigsdb.readthedocs.io/en/latest/rest.html#api-oauth)
+    my $website_profiles = "schemes/1/profiles_csv";
+    system("perl $home_dir/ST_tool/RESTful_API_download_pubmlst.pl --route $website_profiles --output $home_dir/ST_tool/database/mlst/MLST_profiles");
 }
 $nowtime = &get_log_time;
 print "[$nowtime] Finish mlst dataset update\n\n";
@@ -116,8 +128,12 @@ if ($options{cgmlst} eq "T"){
         print "$cgmlst_update_progress%","..." if ($job_number == 1 or ( ($cgmlst_update_progress%10 ==0) && ($progress_record <$cgmlst_update_progress)) );
         $runner->run(
 	    sub{
-                my $downsite = "https://rest.pubmlst.org/db/pubmlst_spneumoniae_seqdef/loci/".$_."/alleles_fasta";
-                system("wget -q --no-check-certificate -O $tmp_cgmlst/$_.fas -c $downsite");
+	        #my $downsite = "https://rest.pubmlst.org/db/pubmlst_spneumoniae_seqdef/loci/".$_."/alleles_fasta";
+		#system("wget -q --no-check-certificate -O $tmp_cgmlst/$_.fas -c $downsite");
+		
+		#OAuth credentials for download full database from pubMLST (https://bigsdb.readthedocs.io/en/latest/rest.html#api-oauth)
+                my $downsite_cgloci = "loci/".$_."/alleles_fasta";
+                system("perl $home_dir/ST_tool/RESTful_API_download_pubmlst.pl --route $downsite_cgloci --output $tmp_cgmlst/$_.fas");
             }
         )#run end    
     }
@@ -134,7 +150,11 @@ if ($options{cgmlst} eq "T"){
     $nowtime = &get_log_time;
     print "[$nowtime] strat to download cgmlst profile\n";
     system("rm $home_dir/ST_tool/database/cgmlst/cgMLST_profiles");
-    system("wget -q --no-check-certificate -O $home_dir/ST_tool/database/cgmlst/cgMLST_profiles -c https://rest.pubmlst.org/db/pubmlst_spneumoniae_seqdef/schemes/2/profiles_csv");
+    #system("wget -q --no-check-certificate -O $home_dir/ST_tool/database/cgmlst/cgMLST_profiles -c https://rest.pubmlst.org/db/pubmlst_spneumoniae_seqdef/schemes/2/profiles_csv");
+    #OAuth credentials for download full database from pubMLST (https://bigsdb.readthedocs.io/en/latest/rest.html#api-oauth)
+    my $website_cgprofiles = "schemes/2/profiles_csv";
+    system("perl $home_dir/ST_tool/RESTful_API_download_pubmlst.pl --route $website_cgprofiles --output $home_dir/ST_tool/database/cgmlst/cgMLST_profiles");
+
     $nowtime = &get_log_time;
     print "[$nowtime] Finish cgmlst dataset update\n\n";
     print LOG "cgmlst dataset update at $nowtime\n";
