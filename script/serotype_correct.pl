@@ -1,4 +1,4 @@
-#perl /home/xiangyang/Mazhongrui/Streptococcus_pneumoniae/pneumo-typer-v1.0.2/script/serotype_correct.pl /home/xiangyang/Mazhongrui/Streptococcus_pneumoniae/pneumo-typer-v1.0.2/DATABASE/serotype_matrix.txt /home/xiangyang/Mazhongrui/Streptococcus_pneumoniae/pneumo-typer-v1.0.2/pneumo-typer_workplace/result_statistics/Statistics_OUT/CPS_LocusTag_statistics /home/xiangyang/Mazhongrui/Streptococcus_pneumoniae/pneumo-typer-v1.0.2/pneumo-typer_workplace/Serotype.out
+#perl pneumo-typer-v2.0.1/script/serotype_correct_sta.pl pneumo-typer-v2.0.1/DATABASE/serotype_matrix.txt pneumo-typer-v2.0.1/pneumo-typer_workplace/result_statistics/Statistics_OUT/CPS_LocusTag_statistics pneumo-typer-v2.0.1/pneumo-typer_workplace/Serotype.out
 
 use strict;
 use warnings;
@@ -18,7 +18,7 @@ while(<MATRIX>){
     next unless $_ !~ /^#/;
 
     my @array = split /\t/, $_;    
-    my @arr = split /, /, $array[1]; #wciG  35D: 0, 35B: 1
+    my @arr = split /, /, $array[1]; #wciG	35D: 0, 35B: 1
     
     my @ele; #record serotype
     my @temp0; #record serotype in which gene is absence
@@ -100,14 +100,16 @@ while(<PRI>){
             #last;
         }
     }
-  
+    #print "$name: ", "\t", scalar @header_gene, "\t$unique_gene\t", join("\t", @unique_gene), "\n"; ###---
     #put unique gene into @header_gene if unique gene was not found in the first row of CPS_LocusTag_statistics
     my $add_unique_gene_maker = 0;
     if ( (!grep ($_ eq $unique_gene, @header_gene)) && (defined $absence{$unique_gene}) ) {
         push @header_gene, $unique_gene;
-        push @pri, "##";
+        push @pri, "###";
 	$add_unique_gene_maker = 1;
+	print "$name: ", "\t", scalar @header_gene, "\t$unique_gene\t", join("\t", @unique_gene), "\t", scalar @pri, "\t", join("\t", @pri),"\n"; ###---
     }
+    #print "$name: ", "\t", scalar @header_gene, "\t$unique_gene\t", join("\t", @unique_gene), "\t", scalar @pri, join("\t", @pri),"\n"; ###---
 ############################################
 
 #obtain the gene index for gene absence in serotype_matrix.txt
@@ -131,27 +133,32 @@ while(<PRI>){
 
         if (scalar @unique_gene == 1){
             if ($string =~ /\|\Q$unique_gene\E\-SPC(.*?)\|/){
-                $correct_ser = $1 if grep($_ eq $1, @serotype_in_matrix); #gene-SPC, to exclude wrong result when the unique is exist but the serotype dose not belong to @serotype_in_matrix  
-                #print $correct_ser, "\n";     ###---        
+                $correct_ser = $1 if grep($_ eq $1, @serotype_in_matrix); #gene-SPC, to exclude wrong result when the unique is exist but the serotype dose not belong to @serotype_in_matrix
+		#print "$name\t$correct_ser", "\n";     ###---        
                 if (scalar @rindex > 0) { #gene to determine the serotype
                     foreach my $rindex(@rindex){
                         $correct_ser = $presence{$header_gene[$rindex]} if ( (defined $absence{$header_gene[$rindex]}) && ($rindex != -1) && ($unique_gene eq $header_gene[$rindex]) && grep($_ eq $presence_g{$header_gene[$rindex]}, @ser_group) );
-                        #print "$correct_ser\t$presence{$header_gene[$rindex]}\t$presence_g{$header_gene[$rindex]}", "\n";     ###---
+			#print "$correct_ser\t$presence{$header_gene[$rindex]}\t$presence_g{$header_gene[$rindex]}", "\n";     ###---
                     }
                 }
                 $correct_ser =~ s/#SPC/\|/g if $correct_ser  =~ /#SPC/;
-                #print "$correct_ser", "\n";     ###---
+		#print "$name\t$correct_ser", "\n";     ###---
             } 
        
             elsif ($string =~ /\|\Q$unique_gene\E\|/){
                 $correct_ser = $unique_gene; #gene-SPC
                 $correct_ser =~ s/.*\-SPC//g;
+		#print "$name\t$correct_ser\t$unique_gene\t$string\n";
             }
 
             elsif(scalar @rindex > 0){
+		my $full_rindex = join("|", @rindex);
                 foreach my $rindex(@rindex){
-                    $correct_ser = $absence{$header_gene[$rindex]} if ( (defined $absence{$header_gene[$rindex]}) && ($rindex != -1) && ($unique_gene eq $header_gene[$rindex]) && ($pri[$rindex] eq "##") && grep($_ eq $absence_g{$header_gene[$rindex]}, @ser_group) );
-                }
+		    if ( (defined $absence{$header_gene[$rindex]}) && ($rindex != -1) && ($unique_gene eq $header_gene[$rindex]) && grep($_ eq $presence_g{$header_gene[$rindex]}, @ser_group) ) {
+                        $correct_ser = $absence{$header_gene[$rindex]};
+			#print "$name\t$correct_ser\t$full_rindex\t$rindex\t$unique_gene\n";
+		    }
+	        }
             }
         }
         elsif (scalar @unique_gene > 1){
@@ -191,7 +198,7 @@ while(<PRI>){
                     else{
                         if(scalar @rindex > 0){
                             foreach my $rindex(@rindex){
-                                $correct_ser = $absence{$header_gene[$rindex]} if ( (defined $absence{$header_gene[$rindex]}) && ($rindex != -1) && ($g eq $header_gene[$rindex]) && ($pri[$rindex] eq "##") && grep($_ eq $absence{$header_gene[$rindex]}, @ser) );
+                                $correct_ser = $absence{$header_gene[$rindex]} if ( (defined $absence{$header_gene[$rindex]}) && ($rindex != -1) && ($g eq $header_gene[$rindex]) && grep($_ eq $absence{$header_gene[$rindex]}, @ser) );
                             }
                         }
                     }
@@ -201,11 +208,8 @@ while(<PRI>){
     }
 
     print OUT "$name\t$correct_ser\n";
-
     #remove the added unique_gene from @header_gene when $add_unique_gene_maker = 1
     pop @header_gene if $add_unique_gene_maker == 1; #related to line 90
-    #pop @pri if ( (!grep ($_ eq $unique_gene, @header_gene)) && (defined $absence{$unique_gene}) ); #related to line 91
-
 }
 
 

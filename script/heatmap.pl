@@ -60,7 +60,7 @@ perl home_directory/script/heatmap.pl -dir workplace/result_statistics/tbl_heatm
        --x_step
              Draw tree using xstep instead of tree branch length (Default: 10).
        -bootstrap, --show_tree_bootstrap
-             Display the tree bootstrap value, which is obtained from the tree file (Default: F).
+             Display the tree bootstrap value, which is obtained from the tree file (Default: T).
        -srf, --strain_reorder_file
              A two-column tab-delimited text file is used to sort genomes from up to down accoding to users requirement. Each row must consist of a strain name followed by the numerical order that is used for sorting genomes. It should be noted that all strains name must completely match with the genbank files name of all genomes. Gcluster needs a "strain_reorder_file" or a "phylogenetic_file", but not both at the same time. 
              For example:
@@ -173,7 +173,7 @@ my %options = (
     'show_tree_topology'                           => "T",
     'show_tree_branch'                             => "F",
     'x_step'                                       => 10,  # Draw tree using xstep instead of tree branch length
-    'show_tree_bootstrap'                          => "F",
+    'show_tree_bootstrap'                          => "T",
     'strain_reorder_file'                          => undef,  
     'flanking_gene_number'                         => 10,
     'gene_color_filled'                            => "T",    #To color homologous gene clusters or gene families of interest
